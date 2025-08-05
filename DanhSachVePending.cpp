@@ -1,10 +1,10 @@
-#include "DanhSachVePending.h"
+ï»¿#include "DanhSachVePending.h"
 #include "Queue.h"
 #include "Ve.h"
 #include "Header.h"
 
 /********************************************
-* @Description Hàm x? lý ??c file cho Danh Sách Vé ?ang Ch?
+* @Description HÃ m x? lÃ½ ??c file cho Danh SÃ¡ch VÃ© ?ang Ch?
 ********************************************/
 
 template <class Ve>
@@ -26,22 +26,22 @@ void DanhSachVePending<Ve>::xuLyDocFile() {
         if (dataTemp.size() != 6) {
             continue;
         }
-        //Kh?i t?o m?t ??i t??ng Vé m?i
+        //Kh?i t?o m?t ??i t??ng VÃ© m?i
         Ve* newItem = new Ve(dataTemp[0], dataTemp[1], dataTemp[2], dataTemp[3]);
-        //Set các thu?c tính cho Vé ?ó
+        //Set cÃ¡c thu?c tÃ­nh cho VÃ© ?Ã³
         newItem->setSoGhe(dataTemp[4]);
         newItem->setDate(dataTemp[5]);
         newItem->setTimestamp();
 
-        //Them vào danh sách vé C?n ch? x? lý
+        //Them vÃ o danh sÃ¡ch vÃ© C?n ch? x? lÃ½
         Queue<Ve>::enQueue(*newItem);
     }
     ifile.close();
 }
 
 /********************************************
-* @Description Hàm x? lý ghi file cho Danh Sách Vé ?ang Ch?
-* @parameter Vé mu?n ghi vào file
+* @Description HÃ m x? lÃ½ ghi file cho Danh SÃ¡ch VÃ© ?ang Ch?
+* @parameter VÃ© mu?n ghi vÃ o file
 ********************************************/
 
 template <class Ve>
@@ -56,7 +56,7 @@ void DanhSachVePending<Ve>::xuLyGhiFile(Ve data) {
 }
 
 /********************************************
-* @Description Hàm x? lý c?p nh?t l?i file cho Danh Sách Vé ?ang Ch?
+* @Description HÃ m x? lÃ½ c?p nh?t l?i file cho Danh SÃ¡ch VÃ© ?ang Ch?
 ********************************************/
 
 template <class Ve>
@@ -71,4 +71,28 @@ void DanhSachVePending<Ve>::updateFile() {
         }
     }
     ofile.close();
+}
+template <class Ve>
+bool DanhSachVePending<Ve>::xuLyVeTheoMa(string maVeCanXuLy, Ve& veTimDuoc) {
+    Queue<Ve> tempQueue;
+    bool found = false;
+
+    while (!this->isEmpty()) {
+        Ve current = this->deQueue();
+        if (!found && toUpperCase(current.getMaVe()) == toUpperCase(maVeCanXuLy)) {
+            veTimDuoc = current;
+            found = true;
+            continue; // khÃ´ng thÃªm vÃ o tempQueue
+        }
+        tempQueue.enQueue(current);
+    }
+    while (!tempQueue.isEmpty()) {
+        this->enQueue(tempQueue.deQueue());
+    }
+
+    if (found) {
+        this->updateFile();
+    }
+
+    return found;
 }

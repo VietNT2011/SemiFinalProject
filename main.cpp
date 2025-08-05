@@ -301,6 +301,7 @@ int main() {
             cout << setfill('-');
             setColor(14);
             cout << setw(135) << "-" << endl;
+            cbTemp.hienThiSoDoGhe();
 
             setColor(7);
             cout << setfill(' ');
@@ -342,7 +343,7 @@ int main() {
                 system("pause");
                 break;
             }
-            cout << "\t\t\t";
+            cout << "\t";
             cout << "Nhap ma so ghe muon dat: ";
 
             //Xu ly ngoai le nhap stt ghe = string
@@ -624,29 +625,46 @@ int main() {
                     //Ket thuc hien thi
                     string strConfirmHandle;
                     cout << "\t\t\t";
-                    cout << "Bat dau xu ly ve pending? ";
+                    cout << "Ban co muon xu ly cac ve dang cho khong?" << endl;
+                    cout << "\t\t\t";
+                    cout << " Nhap ";
                     setColor(10);
-                    cout << "YES";
+                    cout << "\"YES\"";
                     setColor(7);
-                    cout << " neu dong y, ";
+                    cout << " de xu ly ";
+                    setColor(10);
+                    cout << "tat ca";
+                    setColor(7);
+                    cout << " cac ve pending." << endl;
+                    cout << "\t\t\t";
+                    cout << " Hoac nhap ";
+                    setColor(14);
+                    cout << "ma ve";
+                    setColor(7);
+                    cout << " (VD: VE123) de chi xu ly ";
+                    setColor(14);
+                    cout << "mot ve cu the." << endl;
+                    cout << "\t\t\t";
+                    cout << " Nhap ";
                     setColor(12);
-                    cout << "NO";
+                    cout << "\"NO\"";
                     setColor(7);
-                    cout << " neu khong dong y! ";
+                    cout << " de huy bo tat ca." << endl;
+                    cout << "\n\t\t\tNhap lua chon cua ban: ";
                     setColor(7);
                     cin.ignore();
                     getline(cin, strConfirmHandle);
                     //Chuyen chu thuong thanh chu hoa
                     strConfirmHandle = convertUpperCase(strConfirmHandle);
                     //kiem tra nguoi dung co nhap yes hay no hay khong
-                    if (strConfirmHandle != "YES" && strConfirmHandle != "NO") {
+                    /*if (strConfirmHandle != "YES" && strConfirmHandle != "NO") {
                         setColor(4);
                         cout << "\t\t\t";
                         cout << "Vui long nhap YES hoac NO!" << endl;
                         setColor(7);
                         system("pause");
                         break;
-                    }
+                    }*/
                     if (strConfirmHandle == "YES") {
                         system("cls");
                        
@@ -759,11 +777,87 @@ int main() {
                         //cap nhat lai file danh sach chuyen bay sau khi xu ly xong tat ca ve pending
                         listFlights.updateFile();
                     }
-                    else {
+                    else if(strConfirmHandle == "NO") {
                         cout << "\t\t\t";
                         setColor(4);
                         cout << "Tu choi " << endl;
                         setColor(7);
+                    }
+                    else {
+                        // Người dùng nhập mã vé thay vì YES
+                        string maVeCanXuLy = strConfirmHandle;
+                        Ve veTemp;
+
+                        if (listTicketsPending.xuLyVeTheoMa(maVeCanXuLy, veTemp)) {
+                            system("cls");
+                            cout << "\t\t\t\t\t";
+                            setColor(2);
+                            cout << "DANG XU LY VE CO MA: " << maVeCanXuLy << endl;
+                            setColor(7);
+                            cout << setfill('*');
+                            cout << "\t\t\t\t";
+                            cout << setw(50) << "*" << endl;
+                            cout << setfill(' ');
+
+                            cout << "\t\t\t\t\t";
+                            cout << "Ma ve: " << veTemp.getMaVe() << endl;
+                            cout << "\t\t\t\t\t";
+                            cout << "Khach hang: " << veTemp.getHoTen() << endl;
+                            cout << "\t\t\t\t\t";
+                            cout << "Chuyen Bay: " << veTemp.getMaChuyenBay() << endl;
+                            cout << "\t\t\t\t\t";
+                            cout << "Ma So Ghe: " << veTemp.getSoGhe() << endl;
+                            cout << "\t\t\t\t\t";
+                            cout << "Date: " << veTemp.getDate() << endl;
+
+                            // Tìm chuyến bay
+                            int iSearchChuyenBay = listFlights.timKiemChuyenBay(veTemp.getMaChuyenBay());
+                            ChuyenBay<Ve>* cbTemp = listFlights.getPointerItem(iSearchChuyenBay);
+                            cbTemp->updateTrangThai();
+
+                            if (cbTemp->getTrangThai() == 3) {
+                                setColor(12);
+                                cout << "\t\t\t\t\tTrang thai: That bai - Chuyen bay hoan tat." << endl;
+                                setColor(7);
+                            }
+                            else if (cbTemp->getTrangThai() == 0) {
+                                setColor(12);
+                                cout << "\t\t\t\t\tTrang thai: That bai - Chuyen bay bi huy." << endl;
+                                setColor(7);
+                            }
+                            else {
+                                int iStatusGhe = cbTemp->kiemTraMaSoGhe(veTemp.getSoGhe());
+                                if (iStatusGhe == 3) {
+                                    veTemp.createFile();
+                                    cbTemp->themVeMoi(veTemp);
+                                    cbTemp->sapXepDanhSachVe(1);
+                                    cbTemp->removeGheTrong(veTemp.getSoGhe());
+                                    cbTemp->sapXepDanhSachGheTrong(1);
+                                    cbTemp->updateTrangThai();
+                                    listTicketsSuccess.xuLyGhiFile(veTemp);
+                                    listTicketsSuccess.addTail(veTemp);
+                                    setColor(10);
+                                    cout << "\t\t\t\t\tTrang thai: Thanh cong!" << endl;
+                                    setColor(7);
+                                }
+                                else {
+                                    setColor(12);
+                                    cout << "\t\t\t\t\tTrang thai: That bai." << endl;
+                                    if (iStatusGhe == 2)
+                                        cout << "\t\t\t\t\tLy do: Ghe da duoc dat." << endl;
+                                    else if (iStatusGhe == 1)
+                                        cout << "\t\t\t\t\tLy do: Ma ghe khong hop le." << endl;
+                                    setColor(7);
+                                }
+                            }
+
+                            listFlights.updateFile();
+                        }
+                        else {
+                            setColor(4);
+                            cout << "\t\t\t\t\tKhong tim thay ma ve: " << maVeCanXuLy << endl;
+                            setColor(7);
+                        }
                     }
                     cout << endl;
                     system("pause");
@@ -1011,7 +1105,7 @@ int main() {
                                 cbTemp->hienThiDanhSachKhach();
                                 cout << endl;
                                 //Hien thi danh sach ghe trong cua chuyen bay tim thay
-                                cbTemp->hienThiDanhSachGheTrong();
+                                cbTemp->hienThiSoDoGhe();
                             }
                             cout << endl;
                             system("pause");

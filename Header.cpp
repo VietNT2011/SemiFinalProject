@@ -271,23 +271,24 @@ void startApp()
                                 =  ===(_________D
 
     )";
-    /* int seconds = 5;
-     int totalSteps = 50;
-     int delayMs = (seconds * 1000) / totalSteps;
-     setColor(14);
-     cout << "\n\t\t            Dang tai: [";
-     for (int i = 0; i <= totalSteps; ++i) {
-         int percent = (i * 100) / totalSteps;
+    double seconds = 1.25;
+    int totalSteps = 50;
+    int delayMs = (int)((seconds * 1000) / totalSteps);  // 25ms mỗi bước
 
-         cout << "\r\t\t           Dang tai: [";
-         for (int j = 0; j < i; ++j) cout << "*";
-         for (int j = i; j < totalSteps; ++j) cout << "-";
-         cout << "] " << percent << "%";
-         cout.flush();
+    setColor(14);
+    cout << "\n\t\t            Dang tai: [";
+    for (int i = 0; i <= totalSteps; ++i) {
+        int percent = (i * 100) / totalSteps;
 
-         Sleep(delayMs);
-     }
-     cout << "\n";*/
+        cout << "\r\t\t           Dang tai: [";
+        for (int j = 0; j < i; ++j) cout << "*";
+        for (int j = i; j < totalSteps; ++j) cout << "-";
+        cout << "] " << percent << "%";
+        cout.flush();
+
+        Sleep(delayMs);
+    }
+    cout << "\n";
     Sleep(500);
     system("cls");
 }

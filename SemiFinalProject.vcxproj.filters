@@ -80,9 +80,6 @@
     <ClCompile Include="DanhSachMayBay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DanhSachNhanVien.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DanhSachVePending.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -115,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="Ve.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DanhSachNhanVien.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
