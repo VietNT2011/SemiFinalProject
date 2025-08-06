@@ -1,7 +1,7 @@
-#include "Ve.h"
+Ôªø#include "Ve.h"
 
 /********************************************
-* @Description H‡m kh?i t?o VÈ m?i
+* @Description H√†m kh?i t?o V√© m?i
 ********************************************/
 
 Ve::Ve() {
@@ -13,8 +13,8 @@ Ve::Ve() {
 }
 
 /********************************************
-* @Description H‡m kh?i t?o VÈ m?i
-* @parameter Chu?i m„ vÈ, chu?i m„ chuy?n bay, chu?i CMND/CCCD, chu?i H? TÍn
+* @Description H√†m kh?i t?o V√© m?i
+* @parameter Chu?i m√£ v√©, chu?i m√£ chuy?n bay, chu?i CMND/CCCD, chu?i H? T√™n
 ********************************************/
 
 Ve::Ve(string maVe, string maChuyenBay, string CMND, string hoTen) {
@@ -27,8 +27,8 @@ Ve::Ve(string maVe, string maChuyenBay, string CMND, string hoTen) {
 }
 
 /********************************************
-* @Description H‡m kh?i t?o VÈ m?i
-* @parameter Chu?i m„ vÈ, chu?i m„ chuy?n bay, chu?i CMND/CCCD, chu?i H? TÍn, s? gh?
+* @Description H√†m kh?i t?o V√© m?i
+* @parameter Chu?i m√£ v√©, chu?i m√£ chuy?n bay, chu?i CMND/CCCD, chu?i H? T√™n, s? gh?
 ********************************************/
 
 Ve::Ve(string maVe, string maChuyenBay, string CMND, string hoTen, int soGhe) {
@@ -42,8 +42,8 @@ Ve::Ve(string maVe, string maChuyenBay, string CMND, string hoTen, int soGhe) {
 }
 
 /********************************************
-* @Description H‡m kh?i t?o VÈ m?i
-* @parameter Chu?i m„ vÈ, chu?i m„ chuy?n bay, chu?i CMND/CCCD, chu?i H? TÍn, s? gh?, ng‡y t?o
+* @Description H√†m kh?i t?o V√© m?i
+* @parameter Chu?i m√£ v√©, chu?i m√£ chuy?n bay, chu?i CMND/CCCD, chu?i H? T√™n, s? gh?, ng√†y t?o
 ********************************************/
 
 Ve::Ve(string maVe, string maChuyenBay, string CMND, string hoTen, int soGhe, string date) {
@@ -57,9 +57,9 @@ Ve::Ve(string maVe, string maChuyenBay, string CMND, string hoTen, int soGhe, st
 }
 
 /********************************************
-* @Description H‡m set s? gh? cho VÈ
+* @Description H√†m set s? gh? cho V√©
 * @parameter Chu?i s? gh?
-* @attention Chuy?n t? chu?i s? gh? th‡nh s? gh?, sau ?Û c?p nh?t cho VÈ
+* @attention Chuy?n t? chu?i s? gh? th√†nh s? gh?, sau ?√≥ c?p nh?t cho V√©
 ********************************************/
 
 void Ve::setSoGhe(string temp) {
@@ -70,8 +70,8 @@ void Ve::setSoGhe(string temp) {
 }
 
 /********************************************
-* @Description H‡m l?y thÙng tin c?a VÈ ?? chu?n b? ghi file
-* @return Chu?i thÙng tin c?a VÈ, ng?n c·ch b?i "|"
+* @Description H√†m l?y th√¥ng tin c?a V√© ?? chu?n b? ghi file
+* @return Chu?i th√¥ng tin c?a V√©, ng?n c√°ch b?i "|"
 ********************************************/
 
 string Ve::thongTinFile() {
@@ -85,7 +85,7 @@ string Ve::thongTinFile() {
 }
 
 /********************************************
-* @Description H‡m hi?n th? thÙng tin c?a VÈ
+* @Description H√†m hi?n th? th√¥ng tin c?a V√©
 ********************************************/
 
 void Ve::display() {
@@ -93,7 +93,7 @@ void Ve::display() {
 }
 
 /********************************************
-* @Description H‡m hi?n th? thÙng tin chi ti?t c?a VÈ
+* @Description H√†m hi?n th? th√¥ng tin chi ti?t c?a V√©
 ********************************************/
 
 void Ve::displayDetail() {
@@ -106,8 +106,8 @@ void Ve::displayDetail() {
 }
 
 /********************************************
-* @Description H‡m l?y thÙng tin m„ chuy?n bay c?a VÈ
-* @return Chu?i m„ chuy?n bay c?a VÈ
+* @Description H√†m l?y th√¥ng tin m√£ chuy?n bay c?a V√©
+* @return Chu?i m√£ chuy?n bay c?a V√©
 ********************************************/
 
 string Ve::getMaChuyenBay() {
@@ -115,8 +115,8 @@ string Ve::getMaChuyenBay() {
 }
 
 /********************************************
-* @Description H‡m l?y thÙng tin m„ vÈ c?a VÈ
-* @return Chu?i m„ vÈ c?a VÈ
+* @Description H√†m l?y th√¥ng tin m√£ v√© c?a V√©
+* @return Chu?i m√£ v√© c?a V√©
 ********************************************/
 
 string Ve::getMaVe() {
@@ -124,8 +124,8 @@ string Ve::getMaVe() {
 }
 
 /********************************************
-* @Description H‡m l?y thÙng tin s? gh? c?a VÈ
-* @return S? gh? c?a VÈ
+* @Description H√†m l?y th√¥ng tin s? gh? c?a V√©
+* @return S? gh? c?a V√©
 ********************************************/
 
 int Ve::getSoGhe() {
@@ -133,8 +133,8 @@ int Ve::getSoGhe() {
 }
 
 /********************************************
-* @Description H‡m l?y thÙng tin h? tÍn c?a VÈ
-* @return Chu?i h? tÍn c?a VÈ
+* @Description H√†m l?y th√¥ng tin h? t√™n c?a V√©
+* @return Chu?i h? t√™n c?a V√©
 ********************************************/
 
 string Ve::getHoTen() {
@@ -142,8 +142,8 @@ string Ve::getHoTen() {
 }
 
 /********************************************
-* @Description H‡m l?y thÙng tin ng‡y t?o c?a VÈ
-* @return Chu?i ng‡y t?o c?a VÈ
+* @Description H√†m l?y th√¥ng tin ng√†y t?o c?a V√©
+* @return Chu?i ng√†y t?o c?a V√©
 ********************************************/
 
 string Ve::getDate() {
@@ -151,7 +151,15 @@ string Ve::getDate() {
 }
 
 /********************************************
-* @Description H‡m t?o file m?i v?i tÍn l‡ M„ vÈ c?a VÈ
+* @Description H√†m l·∫•y th√¥ng tin CMND c·ªßa V√©
+* @return Chu·ªói CMND c·ªßa kh√°ch h√†ng s·ªü h·ªØu v√©
+********************************************/
+string Ve::getCMND() {
+    return _strCMND;
+}
+
+/********************************************
+* @Description H√†m t?o file m?i v?i t√™n l√† M√£ v√© c?a V√©
 ********************************************/
 
 void Ve::createFile() {
@@ -170,7 +178,7 @@ void Ve::createFile() {
 }
 
 /********************************************
-* @Description H‡m xÛa file vÈ ?„ ???c t?o v?i tÍn l‡ M„ vÈ c?a VÈ
+* @Description H√†m x√≥a file v√© ?√£ ???c t?o v?i t√™n l√† M√£ v√© c?a V√©
 ********************************************/
 
 void Ve::deleteFile() {
@@ -185,8 +193,8 @@ void Ve::deleteFile() {
 }
 
 /********************************************
-* @Description H‡m set ng‡y t?o cho VÈ
-* @parameter Chu?i ng‡y th·ng
+* @Description H√†m set ng√†y t?o cho V√©
+* @parameter Chu?i ng√†y th√°ng
 ********************************************/
 
 void Ve::setDate(string date) {
@@ -194,7 +202,7 @@ void Ve::setDate(string date) {
 }
 
 /********************************************
-* @Description H‡m set timestamp cho VÈ
+* @Description H√†m set timestamp cho V√©
 ********************************************/
 
 void Ve::setTimestamp() {

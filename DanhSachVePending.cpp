@@ -96,3 +96,29 @@ bool DanhSachVePending<Ve>::xuLyVeTheoMa(string maVeCanXuLy, Ve& veTimDuoc) {
 
     return found;
 }
+
+/********************************************
+* @Description Trả về danh sách tất cả các vé đang chờ theo CMND
+* @parameter CMND khách hàng cần tìm
+* @return vector chứa các vé khớp
+********************************************/
+template <class Ve>
+vector<Ve> DanhSachVePending<Ve>::layTatCaVeTheoCMND(string CMND) {
+    vector<Ve> danhSachVe;
+    Queue<Ve> tempQueue;
+
+    while (!this->isEmpty()) {
+        Ve current = this->deQueue();
+        if (toUpperCase(current.getCMND()) == toUpperCase(CMND)) {
+            danhSachVe.push_back(current);
+        }
+        tempQueue.enQueue(current);
+    }
+
+    // Đưa dữ liệu trở lại hàng đợi gốc
+    while (!tempQueue.isEmpty()) {
+        this->enQueue(tempQueue.deQueue());
+    }
+
+    return danhSachVe;
+}

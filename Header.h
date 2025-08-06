@@ -36,3 +36,4 @@ void menuChucNang();
 void dangNhapNhanVien(string& username, string& password);
 void menuAdmin();
 void menuAdminThongKe();
+void startApp();

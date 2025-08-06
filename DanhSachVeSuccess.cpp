@@ -1,10 +1,10 @@
-#include "DanhSachVeSuccess.h"
+Ôªø#include "DanhSachVeSuccess.h"
 #include "Header.h"
 #include "LinkedList.h"
 #include "Node.h"
 
 /********************************************
-* @Description H‡m x? l˝ ??c file cho Danh S·ch VÈ Th‡nh CÙng
+* @Description H√†m x? l√Ω ??c file cho Danh S√°ch V√© Th√†nh C√¥ng
 ********************************************/
 
 template <class Ve>
@@ -26,22 +26,22 @@ void DanhSachVeSuccess<Ve>::xuLyDocFile() {
         if (dataTemp.size() != 6) {
             continue;
         }
-        //Kh?i t?o m?t ??i t??ng VÈ m?i
+        //Kh?i t?o m?t ??i t??ng V√© m?i
         Ve* newItem = new Ve(dataTemp[0], dataTemp[1], dataTemp[2], dataTemp[3]);
-        //Set c·c thu?c tÌnh cho VÈ ?Û
+        //Set c√°c thu?c t√≠nh cho V√© ?√≥
         newItem->setSoGhe(dataTemp[4]);
         newItem->setDate(dataTemp[5]);
         newItem->setTimestamp();
 
-        //ThÍm v‡o danh s·ch VÈ Th‡nh CÙng
+        //Th√™m v√†o danh s√°ch V√© Th√†nh C√¥ng
         LinkedList<Ve>::addTail(*newItem);
     }
     ifile.close();
 }
 
 /********************************************
-* @Description H‡m x? l˝ ghi file cho Danh S·ch VÈ Th‡nh CÙng
-* @parameter VÈ mu?n ghi file
+* @Description H√†m x? l√Ω ghi file cho Danh S√°ch V√© Th√†nh C√¥ng
+* @parameter V√© mu?n ghi file
 ********************************************/
 
 template <class Ve>
@@ -56,7 +56,7 @@ void DanhSachVeSuccess<Ve>::xuLyGhiFile(Ve data) {
 }
 
 /********************************************
-* @Description H‡m x? l˝ c?p nh?t la? file cho Danh S·ch VÈ Th‡nh CÙng
+* @Description H√†m x? l√Ω c?p nh?t la? file cho Danh S√°ch V√© Th√†nh C√¥ng
 ********************************************/
 
 template <class Ve>
@@ -75,9 +75,9 @@ void DanhSachVeSuccess<Ve>::updateFile() {
 }
 
 /********************************************
-* @Description H‡m tÏm ki?m VÈ trong Danh S·ch VÈ Th‡nh CÙng
-* @parameter S? gh? v‡ Chu?i M„ Chuy?n Bay mu?n tÏm
-* @return Tr? v? ??a ch? c?a VÈ tÏm th?y, n?u khÙng tÏm th?y thÏ tr? v? NULL
+* @Description H√†m t√¨m ki?m V√© trong Danh S√°ch V√© Th√†nh C√¥ng
+* @parameter S? gh? v√† Chu?i M√£ Chuy?n Bay mu?n t√¨m
+* @return Tr? v? ??a ch? c?a V√© t√¨m th?y, n?u kh√¥ng t√¨m th?y th√¨ tr? v? NULL
 ********************************************/
 
 template <class Ve>
@@ -94,9 +94,9 @@ Ve* DanhSachVeSuccess<Ve>::timKiemVe(int maSoGhe, string maChuyenBay) {
 }
 
 /********************************************
-* @Description H‡m tÏm ki?m VÈ trong Danh S·ch VÈ Th‡nh CÙng
-* @parameter Chu?i M„ VÈ mu?n tÏm
-* @return Tr? v? ??a ch? c?a VÈ tÏm th?y, n?u khÙng tÏm th?y thÏ tr? v? NULL
+* @Description H√†m t√¨m ki?m V√© trong Danh S√°ch V√© Th√†nh C√¥ng
+* @parameter Chu?i M√£ V√© mu?n t√¨m
+* @return Tr? v? ??a ch? c?a V√© t√¨m th?y, n?u kh√¥ng t√¨m th?y th√¨ tr? v? NULL
 ********************************************/
 
 template <class Ve>
@@ -112,9 +112,9 @@ Ve* DanhSachVeSuccess<Ve>::timKiemVe(string maVe) {
 }
 
 /********************************************
-* @Description H‡m tÏm ki?m VÈ (Node) trong Danh S·ch VÈ Th‡nh CÙng
-* @parameter Chu?i M„ VÈ mu?n tÏm
-* @return Tr? v? Node ch?a VÈ tÏm th?y, n?u khÙng tÏm th?y thÏ tr? v? NULL
+* @Description H√†m t√¨m ki?m V√© (Node) trong Danh S√°ch V√© Th√†nh C√¥ng
+* @parameter Chu?i M√£ V√© mu?n t√¨m
+* @return Tr? v? Node ch?a V√© t√¨m th?y, n?u kh√¥ng t√¨m th?y th√¨ tr? v? NULL
 ********************************************/
 
 template <class Ve>
@@ -127,4 +127,21 @@ Node<Ve>* DanhSachVeSuccess<Ve>::timKiemNode(string maVe) {
         pWalker = pWalker->_pNext;
     }
     return NULL;
+}
+/********************************************
+* @Description L·∫•y t·∫•t c·∫£ v√© theo CMND/CCCD
+* @parameter CMND c·∫ßn t√¨m
+* @return Vector ch·ª©a c√°c v√© th·ªèa ƒëi·ªÅu ki·ªán
+********************************************/
+template <class Ve>
+vector<Ve> DanhSachVeSuccess<Ve>::layTatCaVeTheoCMND(string CMND) {
+    vector<Ve> danhSach;
+    Node<Ve>* pWalker = LinkedList<Ve>::getHead();
+    while (pWalker != NULL) {
+        if (pWalker->_data.getCMND() == CMND) {
+            danhSach.push_back(pWalker->_data);
+        }
+        pWalker = pWalker->_pNext;
+    }
+    return danhSach;
 }

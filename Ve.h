@@ -26,4 +26,5 @@ public:
     void deleteFile();
     void setDate(string date);
     void setTimestamp();
+    string getCMND();
 };

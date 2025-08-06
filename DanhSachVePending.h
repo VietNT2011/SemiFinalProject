@@ -8,4 +8,5 @@ public:
     void xuLyGhiFile(Ve data);
     void updateFile();
     bool xuLyVeTheoMa(string maVeCanXuLy, Ve& veTimDuoc);
+    vector<Ve> layTatCaVeTheoCMND(string CMND);
 };

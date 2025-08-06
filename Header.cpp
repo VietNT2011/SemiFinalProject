@@ -224,7 +224,7 @@ bool checkKyTuDacBiet(string s) {
 ********************************************/
 void startApp()
 {
-    setColor(14); // Màu sáng
+    setColor(2); // Màu sáng
     cout << R"(
 
      ___       __  .______       __       __  .__   __.  _______                                              
@@ -275,7 +275,7 @@ void startApp()
     int totalSteps = 50;
     int delayMs = (int)((seconds * 1000) / totalSteps);  // 25ms mỗi bước
 
-    setColor(14);
+    setColor(2);
     cout << "\n\t\t            Dang tai: [";
     for (int i = 0; i <= totalSteps; ++i) {
         int percent = (i * 100) / totalSteps;
@@ -298,7 +298,6 @@ void startApp()
 ********************************************/
 
 void menuChucNang() {
-    startApp();
     setColor(10);
     cout << "\t\t\t\t\t";
     cout << "MENU CHUONG TRINH:" << endl;

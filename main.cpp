@@ -51,7 +51,7 @@ int main() {
     NhanVien* nhanVienHienTai = NULL;
     do {
         system("cls");
-
+        startApp();
         menuChucNang();
         // Kiểm tra đầu vào
         while (true) {
@@ -98,6 +98,7 @@ int main() {
         }
         case 2:
         {
+            system("cls");
             // DAT VE
             //update lai trang thai cac chuyen bay
             listFlights.updateTrangThai();
@@ -105,389 +106,586 @@ int main() {
             //cap nhat lai file danh sach cac chuyen bay
             listFlights.updateFile();
 
-            system("cls");
-            string strHoTen, strCMND, strMaChuyenBay;
-            int iMaSoGhe;
+            bool exitBooking = false;
+            bool restartBooking = false;
 
-            setColor(10);
-            cout << "\t\t\t\t\t";
-            cout << "DAT VE:" << endl;
+            // Đặt lại firstTime khi bắt đầu case
+            bool firstInputClear = true;
 
-            setColor(7);
-            cout << "\t\t\t";
-            cout << "Vui Long Dien Thong Tin Ca Nhan" << endl;
+            do {
+                restartBooking = false;
+                system("cls");
+                string strHoTen, strCMND, strMaChuyenBay;
+                int iMaSoGhe;
 
-            setColor(12);
-            cout << "\t\t\t";
-            cout << "Luu y: Chi duoc dat ve truoc gio khoi hanh 15 phut!" << endl;
+                setColor(10);
+                cout << "\t\t\t\t\t";
+                cout << "DAT VE:" << endl;
 
-            setColor(7);
-            cout << "\t\t\t";
-            cout << "Nhap CMND hoac CCCD: ";
-            cin.ignore();
+                setColor(7);
+                cout << "\t\t\t";
+                cout << "Dien tat ca thong tin khach hang theo yeu cau" << endl;
 
-            while (getline(cin, strCMND)) {
-                //Kiem tra khoang trang
-                if (checkContainsSpacing(strCMND)) {
+                setColor(12);
+                cout << "\t\t\t";
+                cout << "Luu y: Chi duoc dat ve truoc gio khoi hanh 15 phut!" << endl;
+                cout << "\t\t\t";
+                cout << "Nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+
+                setColor(7);
+
+                // BƯỚC 1: NHẬP CMND/CCCD
+                cout << "\t\t\t";
+                cout << "Nhap CMND hoac CCCD: ";
+
+                // Chỉ ignore buffer lần đầu tiên, không ignore khi restart
+                static bool firstTime = true;
+                if (firstTime) {
+                    cin.ignore();
+                    firstTime = false;
+                }
+
+                while (getline(cin, strCMND)) {
+                    // Kiểm tra lệnh thoát hoặc quay lại
+                    string upperCMND = convertUpperCase(strCMND);
+                    if (upperCMND == "Q") {
+                        exitBooking = true;
+                        break;
+                    }
+                    if (upperCMND == "B") {
+                        restartBooking = true;
+                        break;
+                    }
+
+                    //Kiem tra khoang trang
+                    if (checkContainsSpacing(strCMND)) {
+                        setColor(12);
+                        cout << "\t\t\t";
+                        cout << "Vui long nhap CMND hoac CCCD khong chua khoang trang!" << endl;
+                        cout << "\t\t\t";
+                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        setColor(7);
+                        cout << "\t\t\t";
+                        cout << "Nhap CMND hoac CCCD: ";
+                        continue;
+                    }
+                    //Kiem tra co phai la chuoi so hay khong
+                    if (!checkIsNumberString(strCMND)) {
+                        setColor(12);
+                        cout << "\t\t\t";
+                        cout << "CMND hoac CCCD khong hop le, vui long nhap lai! " << endl;
+                        cout << "\t\t\t";
+                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        setColor(7);
+                        cout << "\t\t\t";
+                        cout << "Nhap CMND hoac CCCD: ";
+                        continue;
+                    }
+                    //Kiem tra CMND du 9 so, CCCD du 12 so
+                    if (strCMND.length() == 9 || strCMND.length() == 12) {
+                        break;
+                    }
+
                     setColor(12);
                     cout << "\t\t\t";
-                    cout << "Vui long nhap CMND hoac CCCD khong chua khoang trang!" << endl;
+                    cout << "CMND hoac CCCD khong hop le, vui long dien du 9 so (CMND) va 12 so (CCCD)!" << endl;
+                    cout << "\t\t\t";
+                    cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
                     setColor(7);
                     cout << "\t\t\t";
                     cout << "Nhap CMND hoac CCCD: ";
-                    continue;
                 }
-                //Kiem tra co phai la chuoi so hay khong
-                if (!checkIsNumberString(strCMND)) {
-                    setColor(12);
+
+                if (exitBooking || restartBooking) continue;
+
+                //Kiem tra xem khach hang da dat ve truoc do chua
+                KhachHang* searchKhachHang = listCustomers.timKiemKhachHang(strCMND);
+                if (searchKhachHang == NULL) {
+                    // BƯỚC 2: NHẬP HỌ TÊN (chỉ khi khách hàng chưa tồn tại)
                     cout << "\t\t\t";
-                    cout << "CMND hoac CCCD khong hop le, vui long nhap lai! " << endl;
+                    cout << "Nhap Ho Ten cua khach hang: ";
+                    while (getline(cin, strHoTen)) {
+                        // Kiểm tra lệnh thoát hoặc quay lại
+                        string upperHoTen = convertUpperCase(strHoTen);
+                        if (upperHoTen == "Q") {
+                            exitBooking = true;
+                            break;
+                        }
+                        if (upperHoTen == "B") {
+                            restartBooking = true;
+                            break;
+                        }
+
+                        //Kiem tra Ho ten co chua khoang trang hay khong
+                        if (checkContainsSpacing(strHoTen)) {
+                            setColor(12);
+                            cout << "\t\t\t";
+                            cout << "Ho Ten khong duoc chua khoang trang, vui long nhap lai!" << endl;
+                            cout << "\t\t\t";
+                            cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                            setColor(7);
+                            cout << "\t\t\t";
+                            cout << "Nhap Ho Ten: ";
+                            continue;
+                        }
+
+                        if (checkIsNumberString(strHoTen)) {
+                            setColor(12);
+                            cout << "\t\t\t";
+                            cout << "Ho Ten khong phai la so, vui long nhap lai!" << endl;
+                            cout << "\t\t\t";
+                            cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                            setColor(7);
+                            cout << "\t\t\t";
+                            cout << "Nhap Ho Ten: ";
+                            continue;
+                        }
+
+                        if (checkKyTuDacBiet(strHoTen)) {
+                            setColor(12);
+                            cout << "\t\t\t";
+                            cout << "Ho ten khong hop le, vui long nhap lai! " << endl;
+                            cout << "\t\t\t";
+                            cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                            setColor(7);
+                            cout << "\t\t\t";
+                            cout << "Nhap Ho Ten: ";
+                            continue;
+                        }
+
+                        //Kiem tra Ho ten du 2 ki tu
+                        if (strHoTen.length() >= 2) {
+                            break;
+                        }
+                        setColor(12);
+                        cout << "\t\t\t";
+                        cout << "Ho Ten khong hop le, vui long nhap lai!" << endl;
+                        cout << "\t\t\t";
+                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        setColor(7);
+                        cout << "\t\t\t";
+                        cout << "Nhap Ho Ten: ";
+                    }
+
+                    if (exitBooking || restartBooking) continue;
+
+                    //Chuyen thanh UpperCase
+                    strHoTen = convertUpperCase(strHoTen);
+
+                }
+                else {
+                    //Neu khach hang da dat ve truoc do, thi lay thong tin lai
+                    cout << "\t\t\t";
+                    cout << "Khach hang da ton tai trong he thong: ";
+                    strHoTen = searchKhachHang->getHoTen();
+                    setColor(14);
+                    cout << searchKhachHang->getHoTen();
                     setColor(7);
-                    cout << "\t\t\t";
-                    cout << "Nhap CMND hoac CCCD: ";
-                    continue;
+                    cout << endl;
                 }
-                //Kiem tra CMND du 9 so, CCCD du 12 so
-                if (strCMND.length() == 9 || strCMND.length() == 12) {
+
+                // BƯỚC 3: NHẬP MÃ CHUYẾN BAY
+                cout << "\t\t\t";
+                cout << "Nhap Ma Chuyen Bay: ";
+                while (getline(cin, strMaChuyenBay)) {
+                    // Kiểm tra lệnh thoát hoặc quay lại
+                    string upperMaChuyenBay = convertUpperCase(strMaChuyenBay);
+                    if (upperMaChuyenBay == "Q") {
+                        exitBooking = true;
+                        break;
+                    }
+                    if (upperMaChuyenBay == "B") {
+                        restartBooking = true;
+                        break;
+                    }
+
+                    //Kiem tra Ma chuyen bay co chua khoang trang hay khong
+                    if (checkContainsSpacing(strMaChuyenBay)) {
+                        setColor(12);
+                        cout << "\t\t\t";
+                        cout << "Ma chuyen bay chua khoang trang, vui long nhap lai!" << endl;
+                        cout << "\t\t\t";
+                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        setColor(7);
+                        cout << "\t\t\t";
+                        cout << "Nhap Ma Chuyen Bay: ";
+                        continue;
+                    }
+
+                    if (strMaChuyenBay.length() == 0) {
+                        setColor(12);
+                        cout << "\t\t\t";
+                        cout << "Ma chuyen bay khong hop le, vui long nhap lai!" << endl;
+                        cout << "\t\t\t";
+                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        setColor(7);
+                        cout << "\t\t\t";
+                        cout << "Nhap Ma Chuyen Bay: ";
+                        continue;
+                    }
                     break;
                 }
 
-                setColor(12);
-                cout << "\t\t\t";
-                cout << "CMND hoac CCCD khong hop le, vui long dien du 9 so (CMND) va 12 so (CCCD)!" << endl;
-                setColor(7);
-                cout << "\t\t\t";
-                cout << "Nhap CMND hoac CCCD: ";
-            }
-            //Kiem tra xem khach hang da dat ve truoc do chua
-            KhachHang* searchKhachHang = listCustomers.timKiemKhachHang(strCMND);
-            if (searchKhachHang == NULL) {
-                //Neu khach hang chua dat ve truoc do, thi tao moi khach hang
-                cout << "\t\t\t";
-                cout << "Nhap Ho Ten: ";
-                while (getline(cin, strHoTen)) {
-                    //Kiem tra Ho ten co chua khoang trang hay khong
-                    if (checkContainsSpacing(strHoTen)) {
-                        setColor(12);
-                        cout << "\t\t\t";
-                        cout << "Ho Ten khong duoc chua khoang trang, vui long nhap lai!" << endl;
-                        setColor(7);
-                        cout << "\t\t\t";
-                        cout << "Nhap Ho Ten: ";
-                        continue;
-                    }
+                if (exitBooking || restartBooking) continue;
 
-                    if (checkIsNumberString(strHoTen)) {
-                        setColor(12);
-                        cout << "\t\t\t";
-                        cout << "Ho Ten khong phai la so, vui long nhap lai!" << endl;
-                        setColor(7);
-                        cout << "\t\t\t";
-                        cout << "Nhap Ho Ten: ";
-                        continue;
-                    }
+                //chuyen chu thuong thanh chu hoa
+                strMaChuyenBay = convertUpperCase(strMaChuyenBay);
 
-                    if (checkKyTuDacBiet(strHoTen)) {
-                        setColor(12);
-                        cout << "\t\t\t";
-                        cout << "Ho ten khong hop le, vui long nhap lai! " << endl;
-                        setColor(7);
-                        cout << "\t\t\t";
-                        cout << "Nhap Ho Ten: ";
-                        continue;
-                    }
-
-                    //Kiem tra Ho ten du 2 ki tu
-                    if (strHoTen.length() >= 2) {
-                        break;
-                    }
-                    setColor(12);
-                    cout << "\t\t\t";
-                    cout << "Ho Ten khong hop le, vui long nhap lai!" << endl;
-                    setColor(7);
-                    cout << "\t\t\t";
-                    cout << "Nhap Ho Ten: ";
-                }
-                //Chuyen thanh UpperCase
-                strHoTen = convertUpperCase(strHoTen);
-
-            }
-            else {
-                //Neu khach hang da dat ve truoc do, thi lay thong tin lai
-                cout << "\t\t\t";
-                cout << "Chao mung tro lai! Khach hang: ";
-                strHoTen = searchKhachHang->getHoTen();
-                setColor(14);
-                cout << searchKhachHang->getHoTen();
-                setColor(7);
+                //Tim kiem chuyen bay theo ma chuyen bay
+                int iSearchChuyenBay = listFlights.timKiemChuyenBay(strMaChuyenBay);
+                system("cls");
                 cout << endl;
-            }
-            cout << "\t\t\t";
-            cout << "Nhap Ma Chuyen Bay: ";
-            while (getline(cin, strMaChuyenBay)) {
-                //Kiem tra Ma chuyen bay co chua khoang trang hay khong
-                if (checkContainsSpacing(strMaChuyenBay)) {
+
+                if (iSearchChuyenBay == -1) {
+                    setColor(4);
+                    cout << "\t\t\t";
+                    cout << "Khong tim thay Chuyen Bay!" << endl;
+                    cout << "\t\t\t";
+                    cout << "Nhap 'B' de nhap lai hoac 'Q' de thoat: ";
+                    setColor(7);
+                    string choice;
+                    getline(cin, choice);
+                    choice = convertUpperCase(choice);
+                    if (choice == "Q") {
+                        exitBooking = true;
+                        continue;
+                    }
+                    else if (choice == "B") {
+                        restartBooking = true;
+                        continue;
+                    }
+                    else {
+                        system("pause");
+                        restartBooking = true;
+                        continue;
+                    }
+                }
+
+                //Lay thong tin chuyen bay sau khi tim kiem thanh cong
+                ChuyenBay<Ve> cbTemp = listFlights.getItem(iSearchChuyenBay);
+
+                //Hien thi chi tiet chuyen bay
+                setColor(2);
+                cout << "\t\t\t\t\t";
+                cout << "THONG TIN CHUYEN BAY " << strMaChuyenBay << ": " << endl;
+
+                setColor(7);
+                cout << setfill('-');
+                setColor(14);
+                cout << setw(135) << "-" << endl;
+                cout << endl;
+
+                setColor(7);
+                cout << setfill(' ');
+                cout << setw(10) << left << "MAY BAY";
+                cout << setw(15) << left << "MA CHUYEN BAY";
+                cout << setw(20) << left << "NGAY KHOI HANH";
+                cout << setw(15) << left << "SAN BAY DEN";
+                cout << setw(15) << left << "TRANG THAI";
+                cout << setw(15) << left << "SO CHO NGOI";
+                cout << setw(20) << left << "SO CHO NGOI TRONG";
+                cout << setw(100) << left << "DANH SACH VE DUOC DAT" << endl;
+                cout << endl;
+
+                cout << setfill('-');
+                setColor(14);
+                cout << setw(135) << "-" << endl;
+                cout << endl;
+
+                setColor(7);
+                cout << setfill(' ');
+                cbTemp.displayDetail();
+                cout << setfill('-');
+                setColor(14);
+                cout << setw(135) << "-" << endl;
+                cbTemp.hienThiSoDoGhe();
+
+                setColor(7);
+                cout << setfill(' ');
+                cout << endl;
+                //KIEM TRA TRANG THAI CUA CHUYEN BAY		
+                //Kiem tra chuyen bay chua bi huy
+                if (cbTemp.getTrangThai() == 0) {
                     setColor(12);
                     cout << "\t\t\t";
-                    cout << "Ma chuyen bay chua khoang trang, vui long nhap lai!" << endl;
-                    setColor(7);
+                    cout << "Chuyen bay da bi huy!" << endl;
                     cout << "\t\t\t";
-                    cout << "Nhap Ma Chuyen Bay: ";
-                    continue;
+                    cout << "Nhap 'B' de chon chuyen bay khac hoac 'Q' de thoat: ";
+                    setColor(7);
+                    string choice;
+                    getline(cin, choice);
+                    choice = convertUpperCase(choice);
+                    if (choice == "Q") {
+                        exitBooking = true;
+                        continue;
+                    }
+                    else {
+                        restartBooking = true;
+                        continue;
+                    }
                 }
-                
-                if (strMaChuyenBay.length() == 0) {
+                //Kiem tra chuyen bay chua hoan tat
+                if (cbTemp.getTrangThai() == 3) {
                     setColor(12);
                     cout << "\t\t\t";
-                    cout << "Ma chuyen bay khong hop le, vui long nhap lai!" << endl;
+                    cout << "Chuyen bay da hoan tat!" << endl;
+                    cout << "\t\t\t";
+                    cout << "Nhap 'B' de chon chuyen bay khac hoac 'Q' de thoat: ";
                     setColor(7);
+                    string choice;
+                    getline(cin, choice);
+                    choice = convertUpperCase(choice);
+                    if (choice == "Q") {
+                        exitBooking = true;
+                        continue;
+                    }
+                    else {
+                        restartBooking = true;
+                        continue;
+                    }
+                }
+                //Kiem tra chuyen bay van con cho trong 
+                if (cbTemp.isFullSeat()) {
+                    setColor(12);
                     cout << "\t\t\t";
-                    cout << "Nhap Ma Chuyen Bay: ";
-                    continue;
-                }
-                break;
-            }
-            //chuyen chu thuong thanh chu hoa
-            strMaChuyenBay = convertUpperCase(strMaChuyenBay);
-
-            //Tim kiem chuyen bay theo ma chuyen bay
-            int iSearchChuyenBay = listFlights.timKiemChuyenBay(strMaChuyenBay);
-            system("cls");
-            cout << endl;
-
-            if (iSearchChuyenBay == -1) {
-                setColor(4);
-                cout << "\t\t\t";
-                cout << "Khong tim thay Chuyen Bay!" << endl;
-                setColor(7);
-                cout << "\t\t\t";
-                system("pause");
-                break;
-            }
-            //Lay thong tin chuyen bay sau khi tim kiem thanh cong
-            ChuyenBay<Ve> cbTemp = listFlights.getItem(iSearchChuyenBay);
-
-            //Hien thi chi tiet chuyen bay
-            setColor(2);
-            cout << "\t\t\t\t\t";
-            cout << "THONG TIN CHUYEN BAY " << strMaChuyenBay << ": " << endl;
-
-            setColor(7);
-            cout << setfill('-');
-            setColor(14);
-            cout << setw(135) << "-" << endl;
-            cout << endl;
-
-            setColor(7);
-            cout << setfill(' ');
-            cout << setw(10) << left << "MAY BAY";
-            cout << setw(15) << left << "MA CHUYEN BAY";
-            cout << setw(20) << left << "NGAY KHOI HANH";
-            cout << setw(15) << left << "SAN BAY DEN";
-            cout << setw(15) << left << "TRANG THAI";
-            cout << setw(15) << left << "SO CHO NGOI";
-            cout << setw(20) << left << "SO CHO NGOI TRONG";
-            cout << setw(100) << left << "DANH SACH VE DUOC DAT" << endl;
-            cout << endl;
-
-            cout << setfill('-');
-            setColor(14);
-            cout << setw(135) << "-" << endl;
-            cout << endl;
-
-            setColor(7);
-            cout << setfill(' ');
-            cbTemp.displayDetail();
-            cout << setfill('-');
-            setColor(14);
-            cout << setw(135) << "-" << endl;
-            cbTemp.hienThiSoDoGhe();
-
-            setColor(7);
-            cout << setfill(' ');
-            cout << endl;
-            //KIEM TRA TRANG THAI CUA CHUYEN BAY		
-            //Kiem tra chuyen bay chua bi huy
-            if (cbTemp.getTrangThai() == 0) {
-                setColor(12);
-                cout << "\t\t\t";
-                cout << "Chuyen bay da bi huy!" << endl;
-                setColor(7);
-                system("pause");
-                break;
-            }
-            //Kiem tra chuyen bay chua hoan tat
-            if (cbTemp.getTrangThai() == 3) {
-                setColor(12);
-                cout << "\t\t\t";
-                cout << "Chuyen bay da hoan tat!" << endl;
-                setColor(7);
-                system("pause");
-                break;
-            }
-            //Kiem tra chuyen bay van con cho trong 
-            if (cbTemp.isFullSeat()) {
-                setColor(12);
-                cout << "\t\t\t";
-                cout << "Chuyen bay khong con ghe trong!" << endl;
-                setColor(7);
-                system("pause");
-                break;
-            }
-            //Chi cho phep khach hang dat ve truoc gio khoi hanh cua chuyen bay 15 phut.
-            if (cbTemp.getTimestamp() - 60 * 15 <= getCurrentTimestamp()) {
-                setColor(4);
-                cout << "\t\t\t";
-                cout << "Vui long dat ve truoc gio khoi hanh 15 phut!" << endl;
-                setColor(7);
-                system("pause");
-                break;
-            }
-            cout << "\t";
-            cout << "Nhap ma so ghe muon dat: ";
-
-            //Xu ly ngoai le nhap stt ghe = string
-            string str;
-            cin >> str;
-            bool check = false;
-            for (int i = 0;i < str.size();i++) {
-                if (isalpha(str[i])) check = true;
-            }
-            if (!check) iMaSoGhe = stoi(str);
-            else iMaSoGhe = -1;
-            
-            //cin >> iMaSoGhe;
-            int kiemTraGhe = cbTemp.kiemTraMaSoGhe(iMaSoGhe);
-            while (kiemTraGhe != 3) {
-                //Kiem tra cac trang thai ghe cua chuyen bay dua vao so ghe khach nhap.
-                setColor(12);
-                if (kiemTraGhe == 1) {
+                    cout << "Chuyen bay khong con ghe trong!" << endl;
                     cout << "\t\t\t";
-                    cout << "Ma so ghe khong hop le, vui long chon ghe khac!" << endl;
+                    cout << "Nhap 'B' de chon chuyen bay khac hoac 'Q' de thoat: ";
+                    setColor(7);
+                    string choice;
+                    getline(cin, choice);
+                    choice = convertUpperCase(choice);
+                    if (choice == "Q") {
+                        exitBooking = true;
+                        continue;
+                    }
+                    else {
+                        restartBooking = true;
+                        continue;
+                    }
                 }
-                else if (kiemTraGhe == 2) {
-                    cout << "\t\t\t";
-                    cout << "Ma so ghe da duoc dat, vui long chon ghe khac!" << endl;
-                }
-                setColor(7);
-                cout << "\t\t\t";
-                cout << "Nhap ma so ghe muon dat: ";
-                cin >> str;
-                bool check = false;
-                for (int i = 0;i < str.size();i++) {
-                    if (isalpha(str[i])) check = true;
-                }
-                if (!check) iMaSoGhe = stoi(str);
-                else iMaSoGhe = -1;
-                //cin >> iMaSoGhe;
-                kiemTraGhe = cbTemp.kiemTraMaSoGhe(iMaSoGhe);
-            }
-            //Xac nhan lai thong tin dat ve
-            system("cls");
-            setColor(2);
-            cout << "\t\t\t\t";
-            cout << "VUI LONG KIEM TRA LAI THONG TIN DAT VE:" << endl;
-            setColor(7);
-            cout << setfill('-');
-            setColor(14);
-            cout << setw(130) << "-" << endl;
-            setColor(7);
-            cout << setfill(' ');
-            cout << setw(30) << left << "HO TEN";
-            cout << setw(20) << left << "CMND";
-            cout << setw(25) << left << "MA CHUYEN BAY";
-            cout << setw(20) << left << "SO GHE" << endl;
-            cout << setfill('-');
-            setColor(14);
-            cout << setw(130) << "-" << endl;
-            setColor(7);
-            cout << setfill(' ');
-            cout << setw(30) << left << strHoTen;
-            cout << setw(20) << left << strCMND;
-            cout << setw(25) << left << strMaChuyenBay;
-            cout << setw(20) << left << iMaSoGhe << endl;
-            cout << setfill('-');
-            setColor(14);
-            cout << setw(130) << "-" << endl;
-            setColor(7);
-            cout << setfill(' ');
-            cout << endl;
-
-            string strConfirmBook;
-            cout << "\t\t\t";
-            cout << "Xac nhan dat ve: Nhap ";
-            setColor(10);
-            cout << "YES";
-            setColor(7);
-            cout << " neu dong y, ";
-            setColor(12);
-            cout << "NO";
-            setColor(7);
-            cout << " neu tu choi: ";
-            setColor(7);
-            cin.ignore();
-            getline(cin, strConfirmBook);
-            //chuyen chu thuong thanh chu hoa
-            strConfirmBook = convertUpperCase(strConfirmBook);
-            //kiem tra nguoi dung co nhap yes hay no hay khong
-            if (strConfirmBook != "YES" && strConfirmBook != "NO") {
-                setColor(4);
-                cout << "\t\t\t";
-                cout << "Vui long nhap YES hoac NO!" << endl;
-                setColor(7);
-                system("pause");
-                break;
-            }
-            if (strConfirmBook == "YES") {
-                system("cls");
-               
-                system("cls");
                 //Chi cho phep khach hang dat ve truoc gio khoi hanh cua chuyen bay 15 phut.
                 if (cbTemp.getTimestamp() - 60 * 15 <= getCurrentTimestamp()) {
                     setColor(4);
                     cout << "\t\t\t";
                     cout << "Vui long dat ve truoc gio khoi hanh 15 phut!" << endl;
+                    cout << "\t\t\t";
+                    cout << "Nhap 'B' de chon chuyen bay khac hoac 'Q' de thoat: ";
                     setColor(7);
-                    system("pause");
-                    break;
+                    string choice;
+                    getline(cin, choice);
+                    choice = convertUpperCase(choice);
+                    if (choice == "Q") {
+                        exitBooking = true;
+                        continue;
+                    }
+                    else {
+                        restartBooking = true;
+                        continue;
+                    }
                 }
-                //DONG Y DAT VE
-                //Neu chua co khach hang thi them vao danh sach khach hang 
-                if (searchKhachHang == NULL) {
-                    //Tao mot doi tuong KhachHang moi
-                    KhachHang* khachHangMoi = new KhachHang(strCMND, strHoTen, listCustomers.getSize() + 1);
-                    //Them doi tuong vao danh sach Khach Hang
-                    listCustomers.addTail(*khachHangMoi);
-                    //Update lai file KhachHang
-                    listCustomers.xuLyGhiFile(*khachHangMoi);
-                }
-                //Them vao danh sach ve pending
 
-                stringstream ss;
-                ss << iMaSoGhe;
-                string maSoGheString;
-                ss >> maSoGheString;
-                string maVe = strMaChuyenBay + maSoGheString;
-                //Tao mot doi tuong Ve moi
-                Ve* veMoi = new Ve(maVe, strMaChuyenBay, strCMND, strHoTen, iMaSoGhe, getCurrentDate());
-                veMoi->setTimestamp();
-                //Them vao danh sach Ve Pending
-                listTicketsPending.enQueue(*veMoi);
-                //Update lai file VeDangCho
-                listTicketsPending.xuLyGhiFile(*veMoi);
-                setColor(3);
-                cout << "\t\t\t";
-                cout << "DAT VE THANH CONG! VUI LONG CHO NHAN VIEN XU LY!" << endl;
+                // BƯỚC 4: NHẬP SỐ GHẾ
+                bool validSeat = false;
+                while (!validSeat) {
+                    cout << "\t";
+                    cout << "Nhap ma so ghe muon dat (hoac 'Q' de thoat, 'B' de bat dau lai): ";
+
+                    //Xu ly ngoai le nhap stt ghe = string
+                    string str;
+                    cin >> str;
+
+                    // Kiểm tra lệnh thoát hoặc quay lại
+                    string upperStr = convertUpperCase(str);
+                    if (upperStr == "Q") {
+                        exitBooking = true;
+                        break;
+                    }
+                    if (upperStr == "B") {
+                        restartBooking = true;
+                        break;
+                    }
+
+                    bool check = false;
+                    for (int i = 0; i < str.size(); i++) {
+                        if (isalpha(str[i])) check = true;
+                    }
+                    if (!check) iMaSoGhe = stoi(str);
+                    else iMaSoGhe = -1;
+
+                    int kiemTraGhe = cbTemp.kiemTraMaSoGhe(iMaSoGhe);
+                    if (kiemTraGhe == 3) {
+                        validSeat = true;
+                    }
+                    else {
+                        //Kiem tra cac trang thai ghe cua chuyen bay dua vao so ghe khach nhap.
+                        setColor(12);
+                        if (kiemTraGhe == 1) {
+                            cout << "\t\t\t";
+                            cout << "Ma so ghe khong hop le, vui long chon ghe khac!" << endl;
+                        }
+                        else if (kiemTraGhe == 2) {
+                            cout << "\t\t\t";
+                            cout << "Ma so ghe da duoc dat, vui long chon ghe khac!" << endl;
+                        }
+                        cout << "\t\t\t";
+                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        setColor(7);
+                    }
+                }
+
+                if (exitBooking || restartBooking) continue;
+
+                //Xac nhan lai thong tin dat ve
+                system("cls");
+                setColor(2);
+                cout << "\t\t\t\t";
+                cout << "VUI LONG KIEM TRA LAI THONG TIN DAT VE:" << endl;
                 setColor(7);
-            }
-            else {
-                //HUY DAT VE
-                setColor(4);
-                cout << "\t\t\t";
-                cout << "HUY DAT VE THANH CONG! HEN GAP LAI QUY KHACH!" << endl;
+                cout << setfill('-');
+                setColor(14);
+                cout << setw(130) << "-" << endl;
                 setColor(7);
-            }
-            system("pause");
+                cout << setfill(' ');
+                cout << setw(30) << left << "HO TEN";
+                cout << setw(20) << left << "CMND";
+                cout << setw(25) << left << "MA CHUYEN BAY";
+                cout << setw(20) << left << "SO GHE" << endl;
+                cout << setfill('-');
+                setColor(14);
+                cout << setw(130) << "-" << endl;
+                setColor(7);
+                cout << setfill(' ');
+                cout << setw(30) << left << strHoTen;
+                cout << setw(20) << left << strCMND;
+                cout << setw(25) << left << strMaChuyenBay;
+                cout << setw(20) << left << iMaSoGhe << endl;
+                cout << setfill('-');
+                setColor(14);
+                cout << setw(130) << "-" << endl;
+                setColor(7);
+                cout << setfill(' ');
+                cout << endl;
+
+                // BƯỚC 5: XÁC NHẬN ĐẶT VÉ
+                string strConfirmBook;
+                bool validConfirm = false;
+                while (!validConfirm) {
+                    cout << "\t\t\t";
+                    cout << "Xac nhan dat ve: Nhap ";
+                    setColor(10);
+                    cout << "YES";
+                    setColor(7);
+                    cout << " neu dong y, ";
+                    setColor(12);
+                    cout << "NO";
+                    setColor(7);
+                    cout << " neu tu choi";
+                    cout << " (hoac 'Q' de thoat, 'B' de bat dau lai): ";
+                    setColor(7);
+                    // Xóa buffer trước khi đọc input
+                    cin.clear();
+                    cin.sync();
+                    getline(cin, strConfirmBook);
+
+                    // Kiểm tra lệnh thoát hoặc quay lại
+                    string upperConfirm = convertUpperCase(strConfirmBook);
+                    if (upperConfirm == "Q") {
+                        exitBooking = true;
+                        break;
+                    }
+                    if (upperConfirm == "B") {
+                        restartBooking = true;
+                        break;
+                    }
+
+                    //chuyen chu thuong thanh chu hoa
+                    strConfirmBook = convertUpperCase(strConfirmBook);
+
+                    //kiem tra nguoi dung co nhap yes hay no hay khong
+                    if (strConfirmBook == "YES" || strConfirmBook == "NO") {
+                        validConfirm = true;
+                    }
+                    else {
+                        setColor(4);
+                        cout << "\t\t\t";
+                        cout << "Vui long nhap YES hoac NO!" << endl;
+                        cout << "\t\t\t";
+                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        setColor(7);
+                    }
+                }
+
+                if (exitBooking || restartBooking) continue;
+
+                if (strConfirmBook == "YES") {
+                    system("cls");
+
+                    system("cls");
+                    //Chi cho phep khach hang dat ve truoc gio khoi hanh cua chuyen bay 15 phut.
+                    if (cbTemp.getTimestamp() - 60 * 15 <= getCurrentTimestamp()) {
+                        setColor(4);
+                        cout << "\t\t\t";
+                        cout << "Vui long dat ve truoc gio khoi hanh 15 phut!" << endl;
+                        cout << "\t\t\t";
+                        cout << "Nhap 'B' de bat dau lai hoac 'Q' de thoat: ";
+                        setColor(7);
+                        string choice;
+                        getline(cin, choice);
+                        choice = convertUpperCase(choice);
+                        if (choice == "Q") {
+                            exitBooking = true;
+                            continue;
+                        }
+                        else {
+                            restartBooking = true;
+                            continue;
+                        }
+                    }
+                    //DONG Y DAT VE
+                    //Neu chua co khach hang thi them vao danh sach khach hang 
+                    if (searchKhachHang == NULL) {
+                        //Tao mot doi tuong KhachHang moi
+                        KhachHang* khachHangMoi = new KhachHang(strCMND, strHoTen, listCustomers.getSize() + 1);
+                        //Them doi tuong vao danh sach Khach Hang
+                        listCustomers.addTail(*khachHangMoi);
+                        //Update lai file KhachHang
+                        listCustomers.xuLyGhiFile(*khachHangMoi);
+                    }
+                    //Them vao danh sach ve pending
+
+                    stringstream ss;
+                    ss << iMaSoGhe;
+                    string maSoGheString;
+                    ss >> maSoGheString;
+                    string maVe = strMaChuyenBay + maSoGheString;
+                    //Tao mot doi tuong Ve moi
+                    Ve* veMoi = new Ve(maVe, strMaChuyenBay, strCMND, strHoTen, iMaSoGhe, getCurrentDate());
+                    veMoi->setTimestamp();
+                    //Them vao danh sach Ve Pending
+                    listTicketsPending.enQueue(*veMoi);
+                    //Update lai file VeDangCho
+                    listTicketsPending.xuLyGhiFile(*veMoi);
+                    setColor(3);
+                    cout << "\t\t\t";
+                    cout << "DAT VE THANH CONG! VUI LONG CHO NHAN VIEN XU LY!" << endl;
+                    setColor(7);
+                    exitBooking = true; // Thoát sau khi đặt vé thành công
+                }
+                else {
+                    //HUY DAT VE
+                    setColor(4);
+                    cout << "\t\t\t";
+                    cout << "HUY DAT VE THANH CONG! HEN GAP LAI QUY KHACH!" << endl;
+                    setColor(7);
+                    exitBooking = true; // Thoát sau khi hủy đặt vé
+                }
+
+                if (!restartBooking) {
+                    system("pause");
+                }
+
+            } while (restartBooking && !exitBooking);
 
             break;
         }
