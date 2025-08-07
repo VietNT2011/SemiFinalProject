@@ -131,17 +131,19 @@ Node<Ve>* DanhSachVeSuccess<Ve>::timKiemNode(string maVe) {
 /********************************************
 * @Description Lấy tất cả vé theo CMND/CCCD
 * @parameter CMND cần tìm
-* @return Vector chứa các vé thỏa điều kiện
+* @return LinkedList chứa các vé thỏa điều kiện
 ********************************************/
 template <class Ve>
-vector<Ve> DanhSachVeSuccess<Ve>::layTatCaVeTheoCMND(string CMND) {
-    vector<Ve> danhSach;
+LinkedList<Ve> DanhSachVeSuccess<Ve>::layTatCaVeTheoCMND(string CMND) {
+    LinkedList<Ve> danhSach;
     Node<Ve>* pWalker = LinkedList<Ve>::getHead();
+
     while (pWalker != NULL) {
-        if (pWalker->_data.getCMND() == CMND) {
-            danhSach.push_back(pWalker->_data);
+        if (toUpperCase(pWalker->_data.getCMND()) == toUpperCase(CMND)) {
+            danhSach.addTail(pWalker->_data);  // Thêm vào LinkedList thay vì vector
         }
         pWalker = pWalker->_pNext;
     }
+
     return danhSach;
 }

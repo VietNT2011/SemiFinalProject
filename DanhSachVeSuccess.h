@@ -11,5 +11,5 @@ public:
     Ve* timKiemVe(int maSoGhe, string maChuyenBay);
     Ve* timKiemVe(string maVe);
     Node<Ve>* timKiemNode(string maVe);
-    vector<Ve> layTatCaVeTheoCMND(string CMND);
+    LinkedList<Ve> layTatCaVeTheoCMND(string CMND);
 };

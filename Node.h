@@ -25,5 +25,6 @@ public:
     Node(DataType data);
     void display();
     void displayDetail();
-
+    Node<DataType>* getNext();
+    DataType& getData();
 };

@@ -29,3 +29,13 @@ template <class DataType>
 void Node<DataType>::displayDetail() {
     _data.displayDetail();
 }
+
+template <class DataType>
+Node<DataType>* Node<DataType>::getNext() {
+    return _pNext;
+}
+
+template <class DataType>
+DataType& Node<DataType>::getData() {
+    return _data;
+}

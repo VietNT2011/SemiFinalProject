@@ -100,17 +100,18 @@ bool DanhSachVePending<Ve>::xuLyVeTheoMa(string maVeCanXuLy, Ve& veTimDuoc) {
 /********************************************
 * @Description Trả về danh sách tất cả các vé đang chờ theo CMND
 * @parameter CMND khách hàng cần tìm
-* @return vector chứa các vé khớp
+* @return LinkedList chứa các vé khớp
 ********************************************/
 template <class Ve>
-vector<Ve> DanhSachVePending<Ve>::layTatCaVeTheoCMND(string CMND) {
-    vector<Ve> danhSachVe;
+LinkedList<Ve> DanhSachVePending<Ve>::layTatCaVeTheoCMND(string CMND) {
+    LinkedList<Ve> danhSachVe;
     Queue<Ve> tempQueue;
 
+    // Duyệt qua tất cả vé trong queue
     while (!this->isEmpty()) {
         Ve current = this->deQueue();
         if (toUpperCase(current.getCMND()) == toUpperCase(CMND)) {
-            danhSachVe.push_back(current);
+            danhSachVe.addTail(current);  // Thêm vào LinkedList thay vì vector
         }
         tempQueue.enQueue(current);
     }

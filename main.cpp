@@ -98,7 +98,6 @@ int main() {
         }
         case 2:
         {
-            system("cls");
             // DAT VE
             //update lai trang thai cac chuyen bay
             listFlights.updateTrangThai();
@@ -494,6 +493,7 @@ int main() {
                     //Xu ly ngoai le nhap stt ghe = string
                     string str;
                     cin >> str;
+                    cin.ignore(1000, '\n');
 
                     // Kiểm tra lệnh thoát hoặc quay lại
                     string upperStr = convertUpperCase(str);
@@ -570,6 +570,7 @@ int main() {
                 // BƯỚC 5: XÁC NHẬN ĐẶT VÉ
                 string strConfirmBook;
                 bool validConfirm = false;
+
                 while (!validConfirm) {
                     cout << "\t\t\t";
                     cout << "Xac nhan dat ve: Nhap ";
@@ -583,9 +584,9 @@ int main() {
                     cout << " neu tu choi";
                     cout << " (hoac 'Q' de thoat, 'B' de bat dau lai): ";
                     setColor(7);
-                    // Xóa buffer trước khi đọc input
-                    cin.clear();
-                    cin.sync();
+                    //// Xóa buffer trước khi đọc input
+                    //cin.clear();
+                    //cin.sync();
                     getline(cin, strConfirmBook);
 
                     // Kiểm tra lệnh thoát hoặc quay lại
@@ -611,7 +612,7 @@ int main() {
                         cout << "\t\t\t";
                         cout << "Vui long nhap YES hoac NO!" << endl;
                         cout << "\t\t\t";
-                        cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;
+                        /*cout << "Hoac nhap 'Q' de thoat, 'B' de bat dau lai" << endl;*/
                         setColor(7);
                     }
                 }
@@ -1367,6 +1368,196 @@ int main() {
                             system("pause");
                             break;
                         }
+                        
+                        case 3: {
+                            // HIEN THI DANH SACH KHACH HANG
+                            while (true) {  // Vòng lặp chính để có thể xem nhiều khách hàng
+                                system("cls");
+                                setColor(4);
+                                cout << "-> ";
+                                setColor(7);
+                                cout << "3. Danh sach khach hang." << endl << endl;
+
+                                if (listCustomers.getSize() == 0) {
+                                    setColor(4);
+                                    cout << "\t\t\t";
+                                    cout << "Danh sach khach hang trong!" << endl;
+                                    setColor(7);
+                                    break; // Thoát nếu không có khách hàng
+                                }
+                                else {
+                                    setColor(6);
+                                    cout << "\t\t\t\t\tDANH SACH KHACH HANG" << endl;
+                                    cout << "\t\t====================================================================" << endl;
+                                    cout << "\t\t| STT |        Ho Ten        |             CMND/CCCD          | Ve |" << endl;
+                                    cout << "\t\t====================================================================" << endl;
+
+                                    Node<KhachHang>* pWalker = listCustomers.getHead();
+                                    int stt = 1;
+
+                                    while (pWalker != NULL) {
+                                        KhachHang& kh = pWalker->getData();
+
+                                        // Đếm vé bằng cách duyệt qua LinkedList
+                                        LinkedList<Ve> vePending = listTicketsPending.layTatCaVeTheoCMND(kh.getCMND());
+                                        LinkedList<Ve> veSuccess = listTicketsSuccess.layTatCaVeTheoCMND(kh.getCMND());
+                                        int tongVe = vePending.getSize() + veSuccess.getSize();
+
+                                        setColor(6); cout << "\t\t| ";
+                                        setColor(7); cout.width(3);  cout << left << stt;
+                                        setColor(6); cout << " | ";
+                                        setColor(7); cout.width(20); cout << left << kh.getHoTen();
+                                        setColor(6); cout << " | ";
+                                        setColor(7); cout.width(30); cout << left << kh.getCMND();
+                                        setColor(6); cout << " | ";
+                                        setColor(7); cout.width(2); cout << left << tongVe;
+                                        setColor(6); cout << " |" << endl;
+
+                                        pWalker = pWalker->getNext();
+                                        stt++;
+                                    }
+                                    cout << "\t\t====================================================================" << endl;
+                                    setColor(7);
+                                    cout << "\t\t\tTong so khach hang: " << listCustomers.getSize() << endl;
+                                    setColor(7);
+
+                                    cout << endl;
+                                    setColor(3);
+                                    cout << "\t\tNhap CMND/CCCD de xem chi tiet ve (hoac nhap 'B' de thoat): ";
+                                    setColor(7);
+
+                                    string input;
+                                    cin.ignore(1000, '\n');
+                                    getline(cin, input);
+
+                                    // Kiểm tra nếu người dùng muốn thoát
+                                    if (toUpperCase(input) == "B" || input.empty()) {
+                                        break; // Thoát khỏi vòng lặp chính
+                                    }
+
+                                    // Tìm kiếm khách hàng
+                                    Node<KhachHang>* khachHang = listCustomers.getHead();
+                                    bool found = false;
+
+                                    while (khachHang != NULL) {
+                                        if (toUpperCase(khachHang->getData().getCMND()) == toUpperCase(input)) {
+                                            found = true;
+                                            break;
+                                        }
+                                        khachHang = khachHang->getNext();
+                                    }
+
+                                    if (found) {
+                                        system("cls");
+                                        KhachHang& kh = khachHang->getData();
+
+                                        setColor(2);
+                                        cout << "\t\t\tCHI TIET VE CUA KHACH HANG: " << kh.getHoTen() << endl;
+                                        cout << "\t\t\tCMND/CCCD: " << kh.getCMND() << endl;
+                                        cout << "\t\t=================================================================" << endl;
+
+                                        // Lấy danh sách vé pending bằng LinkedList
+                                        LinkedList<Ve> vePending = listTicketsPending.layTatCaVeTheoCMND(kh.getCMND());
+                                        if (vePending.getSize() > 0) {
+                                            setColor(14);
+                                            cout << "\t\t\tVE DANG CHO XU LY (" << vePending.getSize() << " ve):" << endl;
+                                            setColor(6);
+                                            cout << "\t\t| STT |    Ma Ve    | Ma Chuyen Bay |  Ghe  |    Ngay    |" << endl;
+                                            cout << "\t\t=============================================================" << endl;
+
+                                            Node<Ve>* pVeWalker = vePending.getHead();
+                                            int sttVe = 1;
+                                            while (pVeWalker != NULL) {
+                                                Ve& ve = pVeWalker->getData();
+
+                                                setColor(6); cout << "\t\t| ";
+                                                setColor(7); cout.width(3); cout << left << sttVe;
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(11); cout << left << ve.getMaVe();
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(13); cout << left << ve.getMaChuyenBay();
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(5); cout << left << ve.getSoGhe();
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(10); cout << left << ve.getDate();
+                                                setColor(6); cout << " |" << endl;
+
+                                                pVeWalker = pVeWalker->getNext();
+                                                sttVe++;
+                                            }
+                                            cout << "\t\t=============================================================" << endl;
+                                            cout << endl;
+                                        }
+
+                                        // Lấy danh sách vé success bằng LinkedList
+                                        LinkedList<Ve> veSuccess = listTicketsSuccess.layTatCaVeTheoCMND(kh.getCMND());
+                                        if (veSuccess.getSize() > 0) {
+                                            setColor(10); // Green
+                                            cout << "\t\t\tVE DA HOAN THANH (" << veSuccess.getSize() << " ve):" << endl;
+                                            setColor(6);
+                                            cout << "\t\t| STT |    Ma Ve    | Ma Chuyen Bay |  Ghe  |    Ngay    |" << endl;
+                                            cout << "\t\t=============================================================" << endl;
+
+                                            Node<Ve>* pVeWalker = veSuccess.getHead();
+                                            int sttVe = 1;
+                                            while (pVeWalker != NULL) {
+                                                Ve& ve = pVeWalker->getData();
+
+                                                setColor(6); cout << "\t\t| ";
+                                                setColor(7); cout.width(3); cout << left << sttVe;
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(11); cout << left << ve.getMaVe();
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(13); cout << left << ve.getMaChuyenBay();
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(5); cout << left << ve.getSoGhe();
+                                                setColor(6); cout << " | ";
+                                                setColor(7); cout.width(10); cout << left << ve.getDate();
+                                                setColor(6); cout << " |" << endl;
+
+                                                pVeWalker = pVeWalker->getNext();
+                                                sttVe++;
+                                            }
+                                            cout << "\t\t=============================================================" << endl;
+                                            cout << endl;
+                                        }
+
+                                        if (vePending.getSize() == 0 && veSuccess.getSize() == 0) {
+                                            setColor(4);
+                                            cout << "\t\t\tKhach hang nay chua co ve nao!" << endl;
+                                            setColor(7);
+                                        }
+
+                                        setColor(7);
+                                        cout << "\t\tTong so ve: " << (vePending.getSize() + veSuccess.getSize()) << endl;
+                                        cout << "\t\t- Ve dang cho: " << vePending.getSize() << endl;
+                                        cout << "\t\t- Ve da hoan thanh: " << veSuccess.getSize() << endl;
+                                        cout << endl;
+
+                                        setColor(11);
+                                        cout << "\t\tNhan phim bat ky de quay lai danh sach khach hang...";
+                                        setColor(7);
+                                        string temp;
+                                        getline(cin, temp);
+                                        // Sau khi nhấn phím, sẽ quay lại đầu vòng lặp để hiển thị lại danh sách
+                                    }
+                                    else {
+                                        setColor(4);
+                                        cout << "\t\tKhong tim thay khach hang voi CMND/CCCD: " << input << endl;
+                                        setColor(7);
+                                        cout << endl;
+                                        setColor(11);
+                                        cout << "\t\tNhan phim bat ky de tiep tuc...";
+                                        setColor(7);
+                                        string temp;
+                                        getline(cin, temp);
+                                        // Sau khi nhấn phím, sẽ quay lại đầu vòng lặp
+                                    }
+                                }
+                            }
+                            break;
+                        }
+
                         default:
                             exit(1);
                             break;

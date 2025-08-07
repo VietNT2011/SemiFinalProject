@@ -11,6 +11,7 @@
 #include<stdlib.h>
 #include <ctime>
 #include <algorithm>
+#include <limits>
 #pragma warning(disable:4996)
 const int MAX_SIZE = 100;
 const int MAX_SO_LUONG_VE = 100;

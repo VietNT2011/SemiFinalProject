@@ -528,6 +528,15 @@ void menuAdminThongKe() {
     cout << "*";
     cout << "\t";
     setColor(7);
+    cout << "3. Thong ke danh sach khach hang.";
+    setColor(14);
+    cout << "\t\t\t";
+    cout << "*";
+    cout << endl;
+    cout << "\t\t\t";
+    cout << "*";
+    cout << "\t";
+    setColor(7);
     cout << "Moi ban chon thao tac:";
     setColor(14);
     cout << "\t\t\t\t\t";
