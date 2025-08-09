@@ -1210,171 +1210,150 @@ int main() {
                 }
                 case 2:
                 {
-                    //XU LY TRA VE
-
-                    //update lai trang thai cac chuyen bay
+                    // XU LY TRA VE
                     listFlights.updateTrangThai();
-                    //cap nhat lai file danh sach cac chuyen bay
                     listFlights.updateFile();
 
-                    system("cls");
-                    setColor(4);
-                    cout << "-> ";
-                    setColor(7);
-                    cout << "2. Xu ly tra ve." << endl;
-                    setColor(2);
-                    cout << "\t\t\t\t\t";
-                    cout << "DANH SACH VE DA DAT THANH CONG:" << endl;
-                    setColor(7);
-
-                    //Kiem tra danh sach ve pending trong
-                    if (listTicketsSuccess.getSize() == 0) {
-                        cout << "\t\t\t";
+                    while (true)
+                    {
+                        system("cls");
                         setColor(4);
-                        cout << "Khong co danh sach ve thanh cong." << endl;
+                        cout << "-> ";
                         setColor(7);
-                        system("pause");
-                        break;
-                    }
+                        cout << "2. Xu ly tra ve." << endl;
+                        setColor(2);
+                        cout << "\t\t\t\t\t";
+                        cout << "DANH SACH VE DA DAT THANH CONG:" << endl;
+                        setColor(7);
 
-                    //Hien thi danh sach ve success
-                    cout << setfill('-');
-                    setColor(4);
-                    cout << setw(150) << "-" << endl;
-                    setColor(7);
-                    cout << setfill(' ');
-                    cout << setw(20) << left << "MA VE";
-                    cout << setw(20) << left << "MA CHUYEN BAY";
-                    cout << setw(20) << left << "CMND";
-                    cout << setw(20) << left << "HO TEN";
-                    cout << setw(20) << left << "SO GHE";
-                    cout << setw(50) << left << "DATE" << endl;
-                    cout << setfill('-');
-                    setColor(4);
-                    cout << setw(150) << "-" << endl;
-                    setColor(7);
-                    cout << setfill(' ');
-                    listTicketsSuccess.displayDetail();
-                    cout << setfill('-');
-                    setColor(4);
-                    cout << setw(150) << "-" << endl;
-                    setColor(7);
-                    cout << setfill(' ');
-                    //Ket thuc hien thi danh sach
-                    cin.ignore();
-                    cout << "\t\t\t";
-                    cout << "Nhap ma ve muon tra ve: ";
-                    string strMaVe;
-                    while (getline(cin, strMaVe)) {
-                        //Kiem tra Ma chuyen bay co chua khoang trang hay khong
-                        if (checkContainsSpacing(strMaVe)) {
+                        if (listTicketsSuccess.getSize() == 0) {
+                            cout << "\t\t\t";
                             setColor(4);
-                            cout << "\t\t\t";
-                            cout << "Ma Ve chua khoang trang, vui long nhap lai!" << endl;
+                            cout << "Khong co danh sach ve thanh cong." << endl;
                             setColor(7);
-                            cout << "\t\t\t";
-                            cout << "Nhap ma ve muon tra ve: ";
-                            continue;
+                            system("pause");
+                            break;
                         }
-                        if (strMaVe.length() == 0) {
-                            setColor(4);
-                            cout << "\t\t\t";
-                            cout << "Ma Ve khong hop le, vui long nhap lai!" << endl;
-                            setColor(7);
-                            cout << "\t\t\t";
-                            cout << "Nhap ma ve muon tra ve: ";
-                            continue;
-                        }
-                        break;
-                    }
-                    //Chuyen tu chu thuong sang hoa
-                    strMaVe = convertUpperCase(strMaVe);
-                    // tim ve 
-                    Ve* timKiemVe = listTicketsSuccess.timKiemVe(strMaVe);
-                    system("cls");
-                   
-                    system("cls");
-                    setColor(2);
-                    cout << "\t\t\t\t\t";
-                    cout << "TIEN TRINH XU LY TRA VE:" << endl;
-                    setColor(7);
-                    if (timKiemVe != NULL) {
-                        cout << setfill('*');
-                        cout << "\t\t\t\t";
-                        cout << setw(50) << "*" << endl;
+
+                        // Hiển thị danh sách vé
+                        cout << setfill('-');
+                        setColor(4);
+                        cout << setw(150) << "-" << endl;
+                        setColor(7);
                         cout << setfill(' ');
-                        cout << "\t\t\t\t\t";
-                        cout << "Ma ve: " << timKiemVe->getMaVe() << endl;
-                        cout << "\t\t\t\t\t";
-                        cout << "Khach hang: " << timKiemVe->getHoTen() << endl;
-                        cout << "\t\t\t\t\t";
-                        cout << "Chuyen Bay: " << timKiemVe->getMaChuyenBay() << endl;
-                        cout << "\t\t\t\t\t";
-                        cout << "Ma So Ghe: " << timKiemVe->getSoGhe() << endl;
-                        cout << "\t\t\t\t\t";
-                        cout << "Date: " << timKiemVe->getDate() << endl;
-                        int iSearchChuyenBay = listFlights.timKiemChuyenBay(timKiemVe->getMaChuyenBay());
-                        ChuyenBay<Ve>* cbTemp = listFlights.getPointerItem(iSearchChuyenBay);
-                        //Kiem tra thoi gian hien tai voi thoi gian khoi hanh
-                        if (getCurrentTimestamp() >= cbTemp->getTimestamp()) {
-                            cout << "\t\t\t\t\t";
-                            cout << "Trang thai: ";
-                            setColor(12);
-                            cout << "That bai." << endl;
-                            setColor(7);
-                            cout << "\t\t\t\t\t";
-                            cout << "Ly do: Chuyen bay nay da hoan tat." << endl;
+                        cout << setw(20) << left << "MA VE";
+                        cout << setw(20) << left << "MA CHUYEN BAY";
+                        cout << setw(20) << left << "CMND";
+                        cout << setw(20) << left << "HO TEN";
+                        cout << setw(20) << left << "SO GHE";
+                        cout << setw(50) << left << "DATE" << endl;
+                        cout << setfill('-');
+                        setColor(4);
+                        cout << setw(150) << "-" << endl;
+                        setColor(7);
+                        cout << setfill(' ');
+                        listTicketsSuccess.displayDetail();
+                        cout << setfill('-');
+                        setColor(4);
+                        cout << setw(150) << "-" << endl;
+                        setColor(7);
+                        cout << setfill(' ');
+
+                        cin.ignore(1000, '\n');
+                        cout << "\t\t\tNhap ma ve muon tra ve (hoac EXIT de quay lai): ";
+                        string strMaVe;
+                        bool shouldExit = false; //flag EXIT
+
+                        while (getline(cin, strMaVe)) {
+                            if (strMaVe == "EXIT") {
+                                shouldExit = true;
+                                break;
+                            }
+                            if (checkContainsSpacing(strMaVe)) {
+                                setColor(4);
+                                cout << "\t\t\tMa Ve chua khoang trang, vui long nhap lai!" << endl;
+                                setColor(7);
+                                cout << "\t\t\tNhap ma ve muon tra ve: ";
+                                continue;
+                            }
+                            if (strMaVe.length() == 0) {
+                                setColor(4);
+                                cout << "\t\t\tMa Ve khong hop le, vui long nhap lai!" << endl;
+                                setColor(7);
+                                cout << "\t\t\tNhap ma ve muon tra ve: ";
+                                continue;
+                            }
+                            break;
                         }
-                        else if (cbTemp->getTrangThai() == 3) {
-                            cout << "\t\t\t\t\t";
-                            cout << "Trang thai: ";
-                            setColor(12);
-                            cout << "That bai." << endl;
-                            setColor(7);
-                            cout << "\t\t\t\t\t";
-                            cout << "Ly do: Chuyen bay nay da hoan tat." << endl;
+
+                        // Check flag EXIT
+                        if (shouldExit) {
+                            break;
+                        }
+
+                        // Chuyển sang in hoa
+                        strMaVe = convertUpperCase(strMaVe);
+
+                        // Tìm vé
+                        Ve* timKiemVe = listTicketsSuccess.timKiemVe(strMaVe);
+
+                        system("cls");
+                        setColor(2);
+                        cout << "\t\t\t\t\tTIEN TRINH XU LY TRA VE:" << endl;
+                        setColor(7);
+
+                        if (timKiemVe != NULL) {
+                            cout << setfill('*');
+                            cout << "\t\t\t\t" << setw(50) << "*" << endl;
+                            cout << setfill(' ');
+                            cout << "\t\t\t\t\tMa ve: " << timKiemVe->getMaVe() << endl;
+                            cout << "\t\t\t\t\tKhach hang: " << timKiemVe->getHoTen() << endl;
+                            cout << "\t\t\t\t\tChuyen Bay: " << timKiemVe->getMaChuyenBay() << endl;
+                            cout << "\t\t\t\t\tMa So Ghe: " << timKiemVe->getSoGhe() << endl;
+                            cout << "\t\t\t\t\tDate: " << timKiemVe->getDate() << endl;
+
+                            int iSearchChuyenBay = listFlights.timKiemChuyenBay(timKiemVe->getMaChuyenBay());
+                            ChuyenBay<Ve>* cbTemp = listFlights.getPointerItem(iSearchChuyenBay);
+
+                            if (getCurrentTimestamp() >= cbTemp->getTimestamp() || cbTemp->getTrangThai() == 3) {
+                                cout << "\t\t\t\t\tTrang thai: ";
+                                setColor(12);
+                                cout << "That bai." << endl;
+                                setColor(7);
+                                cout << "\t\t\t\t\tLy do: Chuyen bay nay da hoan tat." << endl;
+                            }
+                            else {
+                                cout << "\t\t\t\t\tTrang thai: ";
+                                setColor(10);
+                                cout << "Thanh cong." << endl;
+                                setColor(7);
+                                timKiemVe->deleteFile();
+                                cbTemp->themGheTrongMoi(timKiemVe->getSoGhe());
+                                cbTemp->sapXepDanhSachGheTrong(1);
+                                cbTemp->removeVe(timKiemVe->getSoGhe());
+                                cbTemp->sapXepDanhSachVe(1);
+                                Node<Ve>* nodeVe = listTicketsSuccess.timKiemNode(strMaVe);
+                                listTicketsSuccess.remove(nodeVe);
+                                listTicketsSuccess.updateFile();
+                                cbTemp->updateTrangThai();
+                                listFlights.updateFile();
+                            }
+                            cout << setfill('*');
+                            cout << "\t\t\t\t" << setw(50) << "*" << endl;
+                            cout << setfill(' ');
                         }
                         else {
-                            cout << "\t\t\t\t\t";
-                            cout << "Trang thai: ";
-                            setColor(10);
-                            cout << "Thanh cong." << endl;
+                            setColor(4);
+                            cout << "\t\t\tMa ve khong ton tai trong he thong!" << endl;
                             setColor(7);
-                            //xoa file ve
-                            timKiemVe->deleteFile();
-                            //them ghe trong vao chuyen bay
-                            cbTemp->themGheTrongMoi(timKiemVe->getSoGhe());
-                            //Sau khi them ghe trong thi sap xep lai
-                            cbTemp->sapXepDanhSachGheTrong(1);
-                            // xoa ve khoi chuyen bay
-                            cbTemp->removeVe(timKiemVe->getSoGhe());
-                            //Sau khi xpa ve thi sap xep lai danh sach ve
-                            cbTemp->sapXepDanhSachVe(1);
-                            //xoa khoi danh sach ve success
-                            Node<Ve>* nodeVe = listTicketsSuccess.timKiemNode(strMaVe);
-                            listTicketsSuccess.remove(nodeVe);
-                            //Update lai file VeThanhCong
-                            listTicketsSuccess.updateFile();
-                            //Update lai trang thai cua chuyen bay
-                            cbTemp->updateTrangThai();
-                            //Update file danh sach chuyen bay
-                            listFlights.updateFile();
                         }
-                        cout << setfill('*');
-                        cout << "\t\t\t\t";
-                        cout << setw(50) << "*" << endl;
-                        cout << setfill(' ');
+
+                        cout << endl;
+                        system("pause");
                     }
-                    else {
-                        setColor(4);
-                        cout << "\t\t\t";
-                        cout << "Ma ve khong ton tai trong he thong!" << endl;
-                        setColor(7);
-                    }
-                    cout << endl;
-                    system("pause");
                     break;
                 }
+
                 case 3:
                 {
                     int iOptionSubAdmin = 0;
