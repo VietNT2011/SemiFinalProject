@@ -292,6 +292,57 @@ void DanhSachChuyenBay<ChuyenBay, MayBay, Ve>::hienThiChuyenBay() {
     
 }
 
+template <class ChuyenBay, class MayBay, class Ve>
+void DanhSachChuyenBay<ChuyenBay, MayBay, Ve>::ShowListNoSearch() {
+    setColor(10);
+    cout << "\t\t\t\t\t";
+    cout << "DANH SACH CAC CHUYEN BAY:" << endl;
+    setColor(7);
+    cout << setfill('-');
+    setColor(14);
+    cout << setw(120) << "-" << endl;
+    cout << endl;
+
+    setColor(7);
+    cout << setfill(' ');
+    cout << setw(18) << left << "MA CHUYEN BAY";
+    cout << setw(22) << left << "NGAY KHOI HANH";
+    cout << setw(22) << left << "SAN BAY DEN";
+    cout << setw(22) << left << "TRANG THAI";
+    cout << setw(100) << left << "DANH SACH VE DUOC DAT" << endl;
+
+    cout << setfill('-');
+    setColor(14);
+    cout << setw(120) << "-" << endl;
+
+    setColor(7);
+    cout << setfill(' ');
+    for (int i = 0; i < ArrayList<ChuyenBay>::getSize(); i++) {
+        ChuyenBay item = ArrayList<ChuyenBay>::getItem(i);
+        if (item.getTrangThai() == 0) {
+            setColor(4);
+        }
+        else if (item.getTrangThai() == 1) {
+            setColor(9);
+        }
+        else if (item.getTrangThai() == 2) {
+            setColor(4);
+        }
+        else if (item.getTrangThai() == 3) {
+            setColor(10);
+        }
+
+        item.display();
+        setColor(7);
+    }
+    cout << setfill('-');
+    setColor(14);
+    cout << setw(120) << "-" << endl;
+    setColor(7);
+    cout << setfill(' ');
+    cout << endl;
+}
+
 /********************************************
 * @Description Hàm update tr?ng thái c?a t?t c? các chuy?n bay trong Danh Sách Chuy?n Bay
 ********************************************/

@@ -1390,128 +1390,182 @@ int main() {
                         }
                         case 1: {
                             //THONG KE DANH SACH VE VA DANH SACH GHE TRONG
-                            system("cls");
-                            setColor(4);
-                            cout << "-> ";
-                            setColor(7);
-                            cout << "3.1. Thong ke theo ma chuyen bay." << endl;
-                            cin.ignore();
-                            cout << "\t\t\t";
-                            cout << "Nhap ma chuyen bay: ";
-                            string maChuyenBay;
-                            while (getline(cin, maChuyenBay)) {
-                                //Kiem tra Ma chuyen bay co chua khoang trang hay khong
-                                if (checkContainsSpacing(maChuyenBay)) {
-                                    setColor(4);
-                                    cout << "\t\t\t";
-                                    cout << "Ma chuyen bay chua khoang trang, vui long nhap lai!" << endl;
-                                    setColor(7);
-                                    cout << "\t\t\t";
-                                    cout << "Nhap ma chuyen bay: ";
-                                    continue;
-                                }
-                                if (maChuyenBay.length() == 0) {
-                                    setColor(4);
-                                    cout << "\t\t\t";
-                                    cout << "Ma chuyen bay khong hop le, vui long nhap lai!" << endl;
-                                    setColor(7);
-                                    cout << "\t\t\t";
-                                    cout << "Nhap ma chuyen bay: ";
-                                    continue;
-                                }
-                                break;
-                            }
-                            //Chuyen tu chu thuong thanh chu hoa
-                            maChuyenBay = convertUpperCase(maChuyenBay);
-                            system("cls");
-                            
-                            system("cls");
-                            int iSearchChuyenBay = listFlights.timKiemChuyenBay(maChuyenBay);
-                            if (iSearchChuyenBay == -1) {
-                                setColor(4);
-                                cout << "\t\t\t";
-                                cout << "Ma chuyen bay khong ton tai trong he thong." << endl;
-                                setColor(7);
-                            }
-                            else {
+                            bool continueStatistics = true;
+                            while (continueStatistics) {
                                 system("cls");
-                                ChuyenBay<Ve>* cbTemp = listFlights.getPointerItem(iSearchChuyenBay);
-                                setColor(2);
-                                cout << "\t\t\t\t\t";
-                                cout << "THONG TIN CHUYEN BAY: " << maChuyenBay << endl << endl;
+                                listFlights.ShowListNoSearch();
+                                setColor(4);
+                                cout << "-> ";
                                 setColor(7);
+                                cout << "3.1. Thong ke theo ma chuyen bay." << endl;
+                                cout << "\t\t\t";
+                                cout << "Nhap ma chuyen bay ";
+                                setColor(14);
+                                cout << "(hoac 'EXIT' de thoat)";
+                                setColor(7);
+                                cout << ": ";
+                                string maChuyenBay;
 
-                                //update lai trang thai cac chuyen bay
-                                listFlights.updateTrangThai();
-                                //cap nhat lai file danh sach cac chuyen bay
-                                listFlights.updateFile();
+                                if (cin.peek() == '\n') cin.ignore();
 
-                                //Hien thi danh sach ve cua chuyen bay tim thay
-                                cbTemp->hienThiDanhSachKhach();
-                                cout << endl;
-                                //Hien thi danh sach ghe trong cua chuyen bay tim thay
-                                cbTemp->hienThiSoDoGhe();
+                                while (getline(cin, maChuyenBay)) {
+                                    //Kiem tra neu nguoi dung muon thoat
+                                    string temp = convertUpperCase(maChuyenBay);
+                                    if (temp == "EXIT") {
+                                        continueStatistics = false;
+                                        break;
+                                    }
+
+                                    //Kiem tra Ma chuyen bay co chua khoang trang hay khong
+                                    if (checkContainsSpacing(maChuyenBay)) {
+                                        setColor(4);
+                                        cout << "\t\t\t";
+                                        cout << "Ma chuyen bay chua khoang trang, vui long nhap lai!" << endl;
+                                        setColor(7);
+                                        cout << "\t\t\t";
+                                        cout << "Nhap ma chuyen bay ";
+                                        setColor(14);
+                                        cout << "(hoac 'EXIT' de thoat)";
+                                        setColor(7);
+                                        cout << ": ";
+                                        continue;
+                                    }
+                                    if (maChuyenBay.length() == 0) {
+                                        setColor(4);
+                                        cout << "\t\t\t";
+                                        cout << "Ma chuyen bay khong hop le, vui long nhap lai!" << endl;
+                                        setColor(7);
+                                        cout << "\t\t\t";
+                                        cout << "Nhap ma chuyen bay ";
+                                        setColor(14);
+                                        cout << "(hoac 'EXIT' de thoat)";
+                                        setColor(7);
+                                        cout << ": ";
+                                        continue;
+                                    }
+                                    break;
+                                }
+
+                                if (!continueStatistics) break;
+
+                                //Chuyen tu chu thuong thanh chu hoa
+                                maChuyenBay = convertUpperCase(maChuyenBay);
+                                system("cls");
+
+                                int iSearchChuyenBay = listFlights.timKiemChuyenBay(maChuyenBay);
+                                if (iSearchChuyenBay == -1) {
+                                    setColor(4);
+                                    cout << "\t\t\t";
+                                    cout << "Ma chuyen bay khong ton tai trong he thong." << endl;
+                                    setColor(7);
+                                }
+                                else {
+                                    ChuyenBay<Ve>* cbTemp = listFlights.getPointerItem(iSearchChuyenBay);
+                                    setColor(2);
+                                    cout << "\t\t\t\t\t";
+                                    cout << "THONG TIN CHUYEN BAY: " << maChuyenBay << endl << endl;
+                                    setColor(7);
+                                    //update lai trang thai cac chuyen bay
+                                    listFlights.updateTrangThai();
+                                    //cap nhat lai file danh sach cac chuyen bay
+                                    listFlights.updateFile();
+                                    //Hien thi danh sach ve cua chuyen bay tim thay
+                                    cbTemp->hienThiDanhSachKhach();
+                                    cout << endl;
+                                    //Hien thi danh sach ghe trong cua chuyen bay tim thay
+                                    cbTemp->hienThiSoDoGhe();
+                                }
+
+                                cout << "\n\t\t\t";
+                                cout << "Nhan phim bat ky de tiep tuc xem chuyen bay khac...";
+                                system("pause");
                             }
-                            cout << endl;
-                            system("pause");
                             break;
                         }
+
                         case 2: {
                             //THONG KE SO LAN THUC HIEN CHUYEN BAY THEO MAY BAY
-                            system("cls");
-                            setColor(4);
-                            cout << "-> ";
-                            setColor(7);
-                            cout << "3.2. Thong ke so lan thuc hien chuyen bay theo may bay." << endl;
-                            cin.ignore();
-                            cout << "\t\t\t";
-                            cout << "Nhap so hieu may bay: ";
-                            string soHieuMayBay;
-                            while (getline(cin, soHieuMayBay)) {
-                                //Kiem tra Ma chuyen bay co chua khoang trang hay khong
-                                if (checkContainsSpacing(soHieuMayBay)) {
-                                    setColor(4);
-                                    cout << "\t\t\t";
-                                    cout << "So hieu may bay chua khoang trang, vui long nhap lai!" << endl;
-                                    setColor(7);
-                                    cout << "\t\t\t";
-                                    cout << "Nhap so hieu may bay: ";
-                                    continue;
-                                }
-                                if (soHieuMayBay.length() == 0) {
-                                    setColor(4);
-                                    cout << "\t\t\t";
-                                    cout << "So hieu may bay khong hop le, vui long nhap lai!" << endl;
-                                    setColor(7);
-                                    cout << "\t\t\t";
-                                    cout << "Nhap so hieu may bay: ";
-                                    continue;
-                                }
-                                break;
-                            }
-                            //Chuyen tu chu thuong thanh chu hoa
-                            soHieuMayBay = convertUpperCase(soHieuMayBay);
-                            system("cls");
-                            
-                            system("cls");
-                            MayBay* timKiemMayBay = listPlanes.timKiemMayBay(soHieuMayBay);
-                            if (timKiemMayBay == NULL) {
-                                setColor(4);
-                                cout << "\t\t\t";
-                                cout << "So hieu may bay khong ton tai trong he thong." << endl;
-                                setColor(7);
-                            }
-                            else {
+                            bool continueStatistics = true;
+                            while (continueStatistics) {
                                 system("cls");
-                                //update lai trang thai cac chuyen bay
-                                listFlights.updateTrangThai();
-                                //cap nhat lai file danh sach cac chuyen bay
-                                listFlights.updateFile();
+                                listPlanes.showAll();
+                                setColor(4);
+                                cout << "-> ";
+                                setColor(7);
+                                cout << "3.2. Thong ke so lan thuc hien chuyen bay theo may bay." << endl;
+                                cout << "\t\t\t";
+                                cout << "Nhap so hieu may bay ";
+                                setColor(14);
+                                cout << "(hoac 'EXIT' de thoat)";
+                                setColor(7);
+                                cout << ": ";
+                                string soHieuMayBay;
 
-                                listFlights.hienThiSoLanBay(soHieuMayBay);
+                                if (cin.peek() == '\n') cin.ignore();
+
+                                while (getline(cin, soHieuMayBay)) {
+                                    //Kiem tra neu nguoi dung muon thoat
+                                    string temp = convertUpperCase(soHieuMayBay);
+                                    if (temp == "EXIT") {
+                                        continueStatistics = false;
+                                        break;
+                                    }
+
+                                    //Kiem tra Ma chuyen bay co chua khoang trang hay khong
+                                    if (checkContainsSpacing(soHieuMayBay)) {
+                                        setColor(4);
+                                        cout << "\t\t\t";
+                                        cout << "So hieu may bay chua khoang trang, vui long nhap lai!" << endl;
+                                        setColor(7);
+                                        cout << "\t\t\t";
+                                        cout << "Nhap so hieu may bay ";
+                                        setColor(14);
+                                        cout << "(hoac 'EXIT' de thoat)";
+                                        setColor(7);
+                                        cout << ": ";
+                                        continue;
+                                    }
+                                    if (soHieuMayBay.length() == 0) {
+                                        setColor(4);
+                                        cout << "\t\t\t";
+                                        cout << "So hieu may bay khong hop le, vui long nhap lai!" << endl;
+                                        setColor(7);
+                                        cout << "\t\t\t";
+                                        cout << "Nhap so hieu may bay ";
+                                        setColor(14);
+                                        cout << "(hoac 'EXIT' de thoat)";
+                                        setColor(7);
+                                        cout << ": ";
+                                        continue;
+                                    }
+                                    break;
+                                }
+
+                                if (!continueStatistics) break;
+
+                                //Chuyen tu chu thuong thanh chu hoa
+                                soHieuMayBay = convertUpperCase(soHieuMayBay);
+                                system("cls");
+
+                                MayBay* timKiemMayBay = listPlanes.timKiemMayBay(soHieuMayBay);
+                                if (timKiemMayBay == NULL) {
+                                    setColor(4);
+                                    cout << "\t\t\t";
+                                    cout << "So hieu may bay khong ton tai trong he thong." << endl;
+                                    setColor(7);
+                                }
+                                else {
+                                    //update lai trang thai cac chuyen bay
+                                    listFlights.updateTrangThai();
+                                    //cap nhat lai file danh sach cac chuyen bay
+                                    listFlights.updateFile();
+                                    listFlights.hienThiSoLanBay(soHieuMayBay);
+                                }
+
+                                cout << "\n\t\t\t";
+                                cout << "Nhan phim bat ky de tiep tuc xem may bay khac...";
+                                system("pause");
                             }
-                            cout << endl;
-                            system("pause");
                             break;
                         }
                         

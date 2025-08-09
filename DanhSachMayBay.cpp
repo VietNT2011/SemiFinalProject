@@ -1,8 +1,8 @@
-#include "DanhSachMayBay.h"
+Ôªø#include "DanhSachMayBay.h"
 #include "LinkedList.h"
 
 /********************************************
-* @Description H‡m x? l˝ ??c file cho Danh S·ch M·y Bay
+* @Description H√†m x? l√Ω ??c file cho Danh S√°ch M√°y Bay
 ********************************************/
 
 template <class MayBay>
@@ -24,22 +24,22 @@ void DanhSachMayBay<MayBay>::xuLyDocFile() {
         if (dataTemp.size() != 2) {
             continue;
         }
-        //Kh?i t?o m?t ??i t??ng M·y Bay m?i
+        //Kh?i t?o m?t ??i t??ng M√°y Bay m?i
         MayBay* newItem = new MayBay();
-        //Set c·c thu?c tÌnh cho ??i t??ng
+        //Set c√°c thu?c t√≠nh cho ??i t??ng
         newItem->setSoHieuMayBay(dataTemp[0]);
         newItem->setSoCho(dataTemp[1]);
 
-        //ThÍm v‡o danh s·ch m·y bay
+        //Th√™m v√†o danh s√°ch m√°y bay
         LinkedList<MayBay>::addTail(*newItem);
     }
     ifile.close();
 }
 
 /********************************************
-* @Description H‡m tÏm ki?m M·y bay cho Danh S·ch M·y Bay
-* @parameter Chu?i S? hi?u m·y bay c?n tÏm
-* @return Tr? v? ??a ch? c?a M·y Bay tÏm th?y, n?u khÙng tÏm th?y thÏ tr? v? NULL
+* @Description H√†m t√¨m ki?m M√°y bay cho Danh S√°ch M√°y Bay
+* @parameter Chu?i S? hi?u m√°y bay c?n t√¨m
+* @return Tr? v? ??a ch? c?a M√°y Bay t√¨m th?y, n?u kh√¥ng t√¨m th?y th√¨ tr? v? NULL
 ********************************************/
 
 template <class MayBay>
@@ -52,4 +52,45 @@ MayBay* DanhSachMayBay<MayBay>::timKiemMayBay(string soHieuMayBay) {
         pWalker = pWalker->_pNext;
     }
     return NULL;
+}
+
+/********************************************
+* @Description H√†m hi·ªÉn th·ªã t·∫•t c·∫£ m√°y bay trong danh s√°ch d∆∞·ªõi d·∫°ng b·∫£ng
+********************************************/
+template <class MayBay>
+void DanhSachMayBay<MayBay>::showAll() {
+    cout << "\n";
+
+    setColor(14);
+    cout << "+-----+-------------------------+---------------+" << endl;
+    cout << "| STT |      SO HIEU MAY BAY    |    SO CHO     |" << endl;
+    cout << "+-----+-------------------------+---------------+" << endl;
+
+    Node<MayBay>* current = this->getHead();
+
+    if (current == NULL) {
+        cout << "|              DANH SACH TRONG!             |" << endl;
+        cout << "+-------------------------------------------+" << endl;
+        setColor(7);
+        return;
+    }
+
+    int stt = 1;
+    while (current != NULL) {
+        setColor(14); cout << "|";
+        setColor(7);  cout << setw(4) << right << stt << " ";
+        setColor(14); cout << "|";
+        setColor(7);  cout << " " << setw(23) << left << current->getData().getSoHieuMayBay() << " ";
+        setColor(14); cout << "|";
+        setColor(7);  cout << " " << setw(13) << right << current->getData().getSoCho() << " ";
+        setColor(14); cout << "|" << endl;
+
+        current = current->getNext();
+        stt++;
+    }
+
+    cout << "+-----+-------------------------+---------------+" << endl;
+    cout << "| TONG SO MAY BAY: " << setw(26) << left << this->getSize() << "   |" << endl;
+    cout << "+-----+-------------------------+---------------+" << endl;
+    setColor(7); // Reset v·ªÅ m√†u tr·∫Øng m·∫∑c ƒë·ªãnh
 }

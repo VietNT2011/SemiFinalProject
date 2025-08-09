@@ -13,6 +13,7 @@ public:
     void xuLyDocFile(DanhSachMayBay<MayBay> DSMB, DanhSachVeSuccess<Ve> DSVS);
     void updateFile();
     void hienThiChuyenBay();
+    void ShowListNoSearch();
     void updateTrangThai();
 
 };  

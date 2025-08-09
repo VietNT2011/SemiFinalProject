@@ -6,4 +6,5 @@ class DanhSachMayBay :public LinkedList<MayBay> {
 public:
     void xuLyDocFile();
     MayBay* timKiemMayBay(string soHieuMayBay);
+    void showAll();
 };
