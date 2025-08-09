@@ -1627,7 +1627,7 @@ int main() {
                                     setColor(7);
 
                                     string input;
-                                    cin.ignore(1000, '\n');
+                                    /*cin.ignore(1000, '\n');*/
                                     getline(cin, input);
 
                                     // Kiểm tra nếu người dùng muốn thoát

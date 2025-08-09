@@ -61,6 +61,7 @@ template <class MayBay>
 void DanhSachMayBay<MayBay>::showAll() {
     cout << "\n";
 
+
     setColor(14);
     cout << "+-----+-------------------------+---------------+" << endl;
     cout << "| STT |      SO HIEU MAY BAY    |    SO CHO     |" << endl;
